@@ -27,10 +27,10 @@ const Map<String, String> enCommon = {
   'node.connecting': 'Connecting remote node...',
   'node.failed': 'Remote node connection failed',
   'unlock': 'Unlock Account with Password',
-  'loan.title': 'Self Serviced Loan',
+  'loan.title': 'Mint aUSD',
   'loan.brief':
       'Lock your digital assets(i.e. DOT) in Acala platform to borrow equivalent aUSD.',
-  'loanKSM.title': 'Self Serviced Loan',
+  'loanKSM.title': 'Mint kUSD',
   'loanKSM.brief':
       'Lock your digital assets(i.e. KSM) in Acala platform to borrow equivalent kUSD.',
   'swap.title': 'Swap',
