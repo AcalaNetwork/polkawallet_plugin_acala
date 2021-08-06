@@ -33,12 +33,11 @@ const Map<String, String> enDex = {
   'boot.total': 'Total',
   'boot.my': 'My Liquidity Provision',
   'boot.my.est': 'Est.',
-  'boot.my.share': ' Share',
-  'boot.my.token': ' LP token',
+  'boot.my.share': 'Share',
   'boot.add': 'Add',
   'loan.title': 'Mint aUSD',
   'loan.title.KSM': 'Mint kUSD',
-  'loan.borrowed': 'Minted',
+  'loan.borrowed': 'Owed',
   'loan.collateral': 'Collateral',
   'loan.ratio': 'Collateral Ratio',
   'loan.ratio.info':
@@ -94,6 +93,8 @@ const Map<String, String> enDex = {
   'earn.available': 'Available',
   'earn.stake': 'Stake',
   'earn.unStake': 'Unstake',
+  'earn.unStake.info':
+      'Note: unstake LP tokens before program ends will claim earned rewards & lose Loyalty Bonus.',
   'earn.staked': 'Staked',
   'earn.claim': 'Claim Rewards',
   'earn.claim.info':
@@ -104,9 +105,14 @@ const Map<String, String> enDex = {
   'earn.loyal.info':
       '\nIf rewards are kept in the pool until the end of the program, there\'s an extra bonus.\n',
   'earn.withStake': 'with stake',
-  'earn.withStake.txt': 'whether to stake added LP-Tokens to obtain rewards',
-  'earn.fromPool': 'from staking pool',
-  'earn.fromPool.txt': 'whether to unstake and withdraw from staking pool',
+  'earn.withStake.txt':
+      '\nwhether to stake added LP Tokens to obtain rewards.\n',
+  'earn.withStake.all': 'stake all',
+  'earn.withStake.all.txt': 'stake all your LP Tokens',
+  'earn.withStake.info': 'Stake LP Tokens for Liquidity Mining Rewards',
+  'earn.fromPool': 'with auto unstake',
+  'earn.fromPool.txt':
+      '\nAutomatically unstake LP Tokens and remove liquidity based on the input amount.\n',
   'faucet.title': 'Faucet',
   'faucet.brief': 'Get test Tokens of Acala testnet.',
   'faucet.ok': 'Test Tokens were sent.',
