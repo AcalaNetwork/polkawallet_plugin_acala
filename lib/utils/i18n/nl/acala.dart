@@ -76,7 +76,6 @@ const Map<String, String> enDex = {
   'loan.warn.back': 'Back to modify',
   'loan.my': 'My Vaults',
   'loan.incentive': 'Incentives',
-  'loan.apy': 'APY',
   'txs.action': 'Action',
   'payback.small': 'The remaining debt is too small',
   'earn.title': 'Earn',
@@ -99,6 +98,7 @@ const Map<String, String> enDex = {
   'earn.claim': 'Claim Rewards',
   'earn.claim.info':
       'Note: Claim now will forego your Loyalty Bonus. Are you sure to continue?',
+  'earn.apy': 'APR',
   'earn.incentive': 'Mining',
   'earn.saving': 'Interest',
   'earn.loyal': 'Loyalty Bonus',
