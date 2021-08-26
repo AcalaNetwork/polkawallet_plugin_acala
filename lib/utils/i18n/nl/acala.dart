@@ -128,7 +128,7 @@ const Map<String, String> enDex = {
   'homa.pool.cap': 'Pool Cap',
   'homa.pool.bonded': 'Total Bonded',
   'homa.pool.ratio': 'Bond Ratio',
-  'homa.pool.min': 'Min Bond',
+  'homa.pool.min': 'Min bond',
   'homa.pool.issuance': 'Issuance',
   'homa.pool.cap.error': 'Exceeds the staking pool cap.',
   'homa.pool.low': 'Insufficient pool balance',
