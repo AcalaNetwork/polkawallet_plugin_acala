@@ -83,7 +83,7 @@ const Map<String, String> enDex = {
   'loan.close': 'Close Vault',
   'loan.close.dex': 'Close Vault by Swapping Collateral',
   'loan.close.dex.info':
-      'Part of your collateral will be sold on Swap to pay back all outstanding kUSD. The remaining collateral will be returned to your account. Are you sure to proceed?',
+      'Part of your collateral will be sold on Swap to pay back all outstanding aUSD. The remaining collateral will be returned to your account. Are you sure to proceed?',
   'loan.close.receive': 'Estimated Receive',
   'txs.action': 'Action',
   'payback.small': 'The remaining debt is too small',
