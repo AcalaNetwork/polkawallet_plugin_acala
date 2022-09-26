@@ -104,7 +104,9 @@ class _TransferPageState extends State<TransferPage> {
     if (to == null) return;
     final acc = KeyPairData();
     acc.address = (to as QRCodeResult).address!.address;
-    acc.name = to.address!.name;
+    acc.name = to.address!.name.isNotEmpty
+        ? to.address!.name
+        : Fmt.address(acc.address);
     final res =
         await widget.plugin.sdk.api.account.getAddressIcons([acc.address]);
     if (res != null) {
