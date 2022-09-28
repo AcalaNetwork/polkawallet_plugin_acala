@@ -31,11 +31,6 @@ const node_list = [
     'ss58': ss58_prefix_acala,
     'endpoint': 'wss://acala-rpc-3.aca-api.network/ws',
   },
-  {
-    'name': 'Acala (via OnFinality)',
-    'ss58': ss58_prefix_acala,
-    'endpoint': 'wss://acala-polkadot.api.onfinality.io/public-ws',
-  },
   // {
   //   'name': 'Acala (acala dev node)',
   //   'ss58': ss58_prefix_acala,
