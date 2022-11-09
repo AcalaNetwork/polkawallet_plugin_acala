@@ -298,6 +298,8 @@ class _LoanPageState extends State<LoanPage> {
         }
       });
       loanTypes.addAll(ortherType);
+      loanTypes.removeWhere((e) =>
+          collateralFilterList.indexWhere((i) => e.token?.symbol == i) > -1);
 
       /// The initial tab index will be from arguments or user's vault.
       int initialLoanTypeIndex = 0;

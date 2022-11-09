@@ -61,3 +61,5 @@ const config_modules = {
     'enabled': true,
   },
 };
+
+const collateralFilterList = ['tDOT', 'USDCET'];
