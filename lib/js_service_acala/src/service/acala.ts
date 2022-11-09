@@ -331,7 +331,6 @@ async function getTaigaRedeemAmount(poolNameId: string, input: string, slippage:
   const tx = (<any>window).api.tx.stableAsset.redeemProportion(...res.toChainData());
   return {
     output: res.outputAmounts.map((e) => e.toChainData()),
-    minAmount: res.getMinOutputAmounts().map((e) => e.toChainData()),
     params: tx.args.map((e) => e.toHuman()),
     txHex: tx.toHex(),
   };

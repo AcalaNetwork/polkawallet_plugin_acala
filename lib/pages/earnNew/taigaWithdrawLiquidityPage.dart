@@ -201,11 +201,9 @@ class _TaigaWithdrawLiquidityPageState
               BigInt.parse(balance.amount!);
 
           final shareEmpty = totalBalance == BigInt.zero;
-          BigInt shareInputInt = BigInt.zero;
-          try {
-            shareInputInt =
-                Fmt.tokenInt(_amountCtrl.text.trim(), balance.decimals!);
-          } catch (_) {}
+          final shareInputInt = _amountCtrl.text.trim().isNotEmpty
+              ? Fmt.tokenInt(_amountCtrl.text.trim(), balance.decimals!)
+              : BigInt.zero;
 
           BigInt shareInt10 = BigInt.zero;
           BigInt shareInt25 = BigInt.zero;
@@ -332,8 +330,8 @@ class _TaigaWithdrawLiquidityPageState
                                                       ? 45
                                                       : 70,
                                                   right: 12),
-                                              title:
-                                                  "${PluginFmt.tokenView(balance.symbol)}66",
+                                              title: PluginFmt.tokenView(
+                                                  balance.symbol),
                                               backgroundColor:
                                                   Color(0xFF974DE4),
                                               style: Theme.of(context)
