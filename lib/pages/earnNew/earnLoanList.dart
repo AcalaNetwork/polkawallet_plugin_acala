@@ -100,6 +100,15 @@ class CollateralIncentiveList extends StatelessWidget {
 
   Future<void> _onClaimReward(
       BuildContext context, TokenBalanceData token, String rewardView) async {
+    final lDOTClaimDisabled = ((plugin.store!.setting.remoteConfig['earn'] ??
+                {})['lDOTClaimDisabled'] ??
+            true) ==
+        true;
+    if (token.symbol == 'LDOT' && lDOTClaimDisabled) {
+      await _showClaimDisabled(context);
+      return;
+    }
+
     final dic = I18n.of(context)!.getDic(i18n_full_dic_acala, 'acala')!;
     double? loyaltyBonus = 0;
     if (incentives![token.tokenNameId] != null) {
@@ -189,6 +198,25 @@ class CollateralIncentiveList extends StatelessWidget {
       );
       Navigator.of(context).pushNamed(TxConfirmPage.route, arguments: params);
     }
+  }
+
+  Future<void> _showClaimDisabled(BuildContext context) async {
+    final dic = I18n.of(context)!.getDic(i18n_full_dic_acala, 'acala')!;
+    await showCupertinoDialog(
+        context: context,
+        builder: (_) {
+          return PolkawalletAlertDialog(
+            title: Text(dic['earn.claim']!),
+            content: Text(dic['earn.ldot.warn']!),
+            actions: <Widget>[
+              PolkawalletActionSheetAction(
+                isDefaultAction: true,
+                child: Text(dic['homa.confirm']!),
+                onPressed: () => Navigator.of(context).pop(true),
+              )
+            ],
+          );
+        });
   }
 
   @override

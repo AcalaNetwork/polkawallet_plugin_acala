@@ -78,13 +78,6 @@ class _LoanAdjustPageState extends State<LoanAdjustPage> {
         fontSize: UI.getTextSize(12, context),
         height: 2.0);
 
-    final debitRatio =
-        (_editorLoan?.collateralInUSD ?? BigInt.zero) == BigInt.zero
-            ? 0.0
-            : _editorLoan!.debits /
-                _editorLoan!.collateralInUSD *
-                Fmt.bigIntToDouble(_editorLoan!.type.liquidationRatio, 18);
-
     final balancePair = _editorLoan == null
         ? []
         : AssetsUtils.getBalancePairFromTokenNameId(widget.plugin,
@@ -153,8 +146,8 @@ class _LoanAdjustPageState extends State<LoanAdjustPage> {
                                       contentStyle: textStyle,
                                     ),
                                     InfoItemRow(
-                                      "${dic['v3.loan.newloanRatio']}:",
-                                      "${Fmt.ratio(debitRatio)}",
+                                      "${dic['v3.loan.newCollateralRatio']}:",
+                                      "${Fmt.ratio(_editorLoan?.collateralRatio ?? 2)}",
                                       labelStyle: textStyle,
                                       contentStyle: textStyle,
                                     ),
