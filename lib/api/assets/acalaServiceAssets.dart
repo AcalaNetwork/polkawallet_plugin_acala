@@ -17,7 +17,7 @@ class AcalaServiceAssets {
 
   Future<List?> getAllTokenSymbols() async {
     final List? res =
-        await plugin.sdk.webView!.evalJavascript('acala.getAllTokens(api)');
+        await plugin.sdk.webView!.evalJavascript('acala.getAllTokens()');
     return res;
   }
 
@@ -53,7 +53,7 @@ class AcalaServiceAssets {
       final channel = '$tokenBalanceChannel${e.symbol}';
       plugin.sdk.api.subscribeMessage(
         'acala.getTokenBalance',
-        ['api', address, e.tokenNameId],
+        [address, e.tokenNameId],
         channel,
         (Map data) {
           callback({
@@ -80,7 +80,7 @@ class AcalaServiceAssets {
           '$tokenBalanceChannel${lpToken.map((e) => e.symbol).join('')}';
       plugin.sdk.api.subscribeMessage(
         'acala.getTokenBalance',
-        ['api', address, e.tokenNameId],
+        [address, e.tokenNameId],
         channel,
         (Map data) {
           callback({

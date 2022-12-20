@@ -11,7 +11,7 @@ class AcalaServiceHistory {
   Future<List?> queryHistory(
       String type, String? address, Map<String, dynamic> params) async {
     final List? list = await plugin.sdk.webView!.evalJavascript(
-        'acala.getHistory(api,"$type","$address",${jsonEncode(params)})');
+        'acala.getHistory("$type","$address",${jsonEncode(params)})');
     return list;
   }
 }

@@ -1,6 +1,6 @@
 import { createDexShareName, FixedPointNumber, forceToCurrencyId, forceToCurrencyName, Token } from "@acala-network/sdk-core";
 import { ApiPromise, ApiRx } from "@polkadot/api";
-import { hexToString } from "@polkadot/util";
+import { hexToString, BN_ZERO } from "@polkadot/util";
 import { nft_image_config } from "../constants/acala";
 import { BN } from "@polkadot/util/bn/bn";
 import { AcalaDex, AggregateDex, NutsDex } from "@acala-network/sdk-swap";
@@ -60,6 +60,8 @@ function _getTokenSymbol(allTokens: any[], tokenNameId: string): string {
 let swapper: AggregateDex;
 async function _initDexSDK(api: ApiRx) {
   const wallet = (<any>window).wallet;
+  await wallet.isReady;
+
   swapper = new AggregateDex({
     api,
     wallet,
@@ -143,8 +145,11 @@ async function calcTokenSwapAmount(apiRx: ApiRx, input: number, output: number, 
 /**
  * getAllTokens, with ForeignAssets
  */
-async function getAllTokens(api: ApiPromise) {
-  const allTokens = await ((<any>window).wallet as Wallet).getTokens();
+async function getAllTokens() {
+  const w = (<any>window).wallet as Wallet;
+  await w.isReady;
+
+  const allTokens = await w.getTokens();
 
   return Object.values(allTokens)
     .map((e) => {
@@ -187,8 +192,11 @@ function _getTokenType(token: Token) {
 /**
  * get token balance from acala wallet sdk
  */
-async function getTokenBalance(api: ApiPromise, address: string, tokenNameId: string, callback: (value: any) => void) {
-  const sub = ((<any>window).wallet as Wallet).subscribeBalance(tokenNameId, address);
+async function getTokenBalance(address: string, tokenNameId: string, callback: (value: any) => void) {
+  const w = (<any>window).wallet as Wallet;
+  await w.isReady;
+
+  const sub = w.subscribeBalance(tokenNameId, address);
   if (!!callback) {
     sub.subscribe({
       next: (value: BalanceData) => {
@@ -382,7 +390,7 @@ async function _fetchCollateralRewards(api: ApiPromise, pool: any, address: stri
   const res = (await Promise.all([
     api.query.rewards.poolInfos({ Loans: pool }),
     api.query.rewards.sharesAndWithdrawnRewards({ Loans: pool }, address),
-    getAllTokens(api),
+    getAllTokens(),
   ])) as any;
   const pendingRewards = (!!api.query.incentives.pendingMultiRewards
     ? await api.query.incentives?.pendingMultiRewards({ Loans: pool }, address)
@@ -448,7 +456,7 @@ async function fetchDexPoolInfo(api: ApiPromise, pool: any, address: string) {
     api.query.rewards.poolInfos({ Dex: pool }),
     api.query.rewards.sharesAndWithdrawnRewards({ Dex: pool }, address),
     api.query.tokens.totalIssuance(pool),
-    getAllTokens(api),
+    getAllTokens(),
   ])) as any;
   const pendingRewards = (!!api.query.incentives.pendingMultiRewards
     ? await api.query.incentives?.pendingMultiRewards({ Dex: pool }, address)
@@ -460,13 +468,13 @@ async function fetchDexPoolInfo(api: ApiPromise, pool: any, address: string) {
   const withdrawns = Array.from(res[2][1].entries()).map((entry) => {
     const currencyId = forceToCurrencyId(api, entry[0]);
     const tokenNameId = forceToCurrencyName(currencyId);
-    const amount = FPNum(entry[1].toString(), _getTokenDecimal(res[4], tokenNameId));
+    const amount = FPNum(entry[1]?.toString() || BN_ZERO, _getTokenDecimal(res[4], tokenNameId));
     return { tokenNameId, amount };
   });
   const pendings = Array.from(pendingRewards.entries()).map((entry) => {
     const currencyId = forceToCurrencyId(api, entry[0]);
     const tokenNameId = forceToCurrencyName(currencyId);
-    const amount = FPNum(entry[1].toString(), _getTokenDecimal(res[4], tokenNameId));
+    const amount = FPNum(entry[1]?.toString() || BN_ZERO, _getTokenDecimal(res[4], tokenNameId));
     return { tokenNameId, amount };
   });
   let saving = "0";
@@ -972,14 +980,14 @@ async function queryDexIncentiveLoyaltyEndBlock(api: ApiPromise) {
   return { result, loyalty };
 }
 
-async function getHistory(api: ApiPromise, type: string, address: string, params: Object) {
+async function getHistory(type: string, address: string, params: any) {
   const history = new History({
     fetchEndpoints: {
-      transfer: "https://api.subquery.network/sq/AcalaNetwork/acala-transfer",
-      swap: "https://api.subquery.network/sq/AcalaNetwork/acala-dex",
-      earn: "https://api.subquery.network/sq/AcalaNetwork/acala-incentives",
-      loan: "https://api.subquery.network/sq/AcalaNetwork/acala-loans",
-      homa: "https://api.subquery.network/sq/AcalaNetwork/acala-homa",
+      transfer: "https://api.polkawallet.io/acala-history-subql",
+      swap: "https://api.polkawallet.io/acala-dex-subql",
+      earn: "https://api.polkawallet.io/acala-history-subql",
+      loan: "https://api.polkawallet.io/acala-loan-subql",
+      homa: "https://api.polkawallet.io/acala-history-subql",
     },
     wallet: (<any>window).wallet as Wallet,
     poolInterval: 5 * 60 * 1000,
