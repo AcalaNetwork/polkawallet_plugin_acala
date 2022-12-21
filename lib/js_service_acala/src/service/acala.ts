@@ -842,8 +842,9 @@ function _calcLPAssets(api: ApiPromise, allTokens: any[], poolInfos: any[], lpTo
     e.reward.incentive.forEach((i) => {
       _addAsset(lpRewards, _getTokenSymbol(allTokens, i.tokenNameId), i.amount * (1 - loyalty));
     });
-    if ((e.reward.saving || 0) > 0) {
-      _addAsset(lpRewards, "AUSD", e.reward.saving || 0);
+    const savingRewards = Number(e.reward.saving || "0");
+    if (savingRewards > 0) {
+      _addAsset(lpRewards, "AUSD", savingRewards);
     }
   });
   return [res, lpTokensFree, lpRewards];
