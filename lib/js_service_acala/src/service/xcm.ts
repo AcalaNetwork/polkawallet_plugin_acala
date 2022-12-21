@@ -32,6 +32,7 @@ const chainNodes = {
   ],
 };
 const xcm_dest_weight_v2 = "5000000000";
+const xcm_dest_weight_unlimited = "Unlimited";
 
 const xcmApi: Record<string, ApiPromise> = {};
 // let xcmApi: ApiPromise;
@@ -132,14 +133,7 @@ async function _getTokenBalance(chain: string, address: string, tokenNameId: str
   };
 }
 
-async function getTransferTx(
-  chainFrom: ChainData,
-  chainTo: ChainData,
-  tokenName: string,
-  amount: string,
-  addressTo: string,
-  sendFee: any
-) {
+async function getTransferTx(chainFrom: ChainData, chainTo: ChainData, tokenName: string, amount: string, addressTo: string, sendFee: any) {
   if (!wallet) {
     wallet = new Wallet((<any>window).api);
     await wallet.isReady;
@@ -149,6 +143,8 @@ async function getTransferTx(
 
   // from acala
   if (chainFrom.name === chain_name_acala) {
+    const useNewDestWeight = (<any>window).api.tx.xTokens.transfer.meta.args[3].type.toString() === "XcmV2WeightLimit";
+
     let dst: any;
     if (chainTo.name === chain_name_polkadot) {
       // to relay-chain
@@ -165,12 +161,17 @@ async function getTransferTx(
         ? {
             module: "xTokens",
             call: "transfer",
-            params: [token.toChainData(), amount, { V1: dst }, xcm_dest_weight_v2],
+            params: [token.toChainData(), amount, { V1: dst }, useNewDestWeight ? xcm_dest_weight_unlimited : xcm_dest_weight_v2],
           }
         : {
             module: "xTokens",
             call: "transferMulticurrencies",
-            params: [[[token.toChainData(), amount], sendFee], 1, { V1: dst }, xcm_dest_weight_v2],
+            params: [
+              [[token.toChainData(), amount], sendFee],
+              1,
+              { V1: dst },
+              useNewDestWeight ? xcm_dest_weight_unlimited : xcm_dest_weight_v2,
+            ],
           };
     } else {
       // to other parachains
@@ -186,12 +187,17 @@ async function getTransferTx(
       ? {
           module: "xTokens",
           call: "transferMulticurrencies",
-          params: [[[token.toChainData(), amount], sendFee], 1, { V1: dst }, xcm_dest_weight_v2],
+          params: [
+            [[token.toChainData(), amount], sendFee],
+            1,
+            { V1: dst },
+            useNewDestWeight ? xcm_dest_weight_unlimited : xcm_dest_weight_v2,
+          ],
         }
       : {
           module: "xTokens",
           call: "transfer",
-          params: [token.toChainData() as any, amount, { V1: dst }, xcm_dest_weight_v2],
+          params: [token.toChainData() as any, amount, { V1: dst }, useNewDestWeight ? xcm_dest_weight_unlimited : xcm_dest_weight_v2],
         };
   }
 
@@ -248,7 +254,7 @@ async function getTransferTx(
     return {
       module: "xTokens",
       call: "transfer",
-      params: [tokenIds[token.name], amount, { V1: dst }, xcm_dest_weight_v2],
+      params: [tokenIds[token.name], amount, { V1: dst }, xcm_dest_weight_unlimited],
     };
   }
 
@@ -266,13 +272,13 @@ async function getTransferParams(
   const res = await getTransferTx(chainFrom, chainTo, tokenName, amount, addressTo, sendFee);
   if (!res) return null;
 
-  const {module, call, params} = res;
-  const tx = (chainFrom.name === 'acala' ? (<any>window).api : getApi(chainFrom.name)).tx[module][call](...params);
+  const { module, call, params } = res;
+  const tx = (chainFrom.name === "acala" ? (<any>window).api : getApi(chainFrom.name)).tx[module][call](...params);
   return {
     module,
     call,
-    params: tx.args.map(e => e.toHuman()),
-    txHex: tx.toHex()
+    params: tx.args.map((e) => e.toHuman()),
+    txHex: tx.toHex(),
   };
 }
 
