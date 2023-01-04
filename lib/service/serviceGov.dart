@@ -22,10 +22,10 @@ class ServiceGov {
 
     final List<List?> res = await Future.wait([
       api.account.getAddressIcons(ls),
-      api.account.queryIndexInfo(ls),
+      // api.account.queryIndexInfo(ls),
     ]);
     store!.accounts.setAddressIconsMap(res[0]!);
-    store!.accounts.setAddressIndex(res[1]!);
+    // store!.accounts.setAddressIndex(res[1]!);
   }
 
   Future<void> subscribeBestNumber() async {
