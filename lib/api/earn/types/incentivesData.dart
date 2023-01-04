@@ -3,8 +3,6 @@ class IncentivesData extends _IncentivesData {
     final res = new IncentivesData();
     res.dex = Map.from(json['Dex']).map((k, v) => MapEntry(
         k, List.of(v).map((e) => IncentiveItemData.fromJson(e)).toList()));
-    res.dexSaving = Map.from(json['DexSaving']).map((k, v) => MapEntry(
-        k, List.of(v).map((e) => IncentiveItemData.fromJson(e)).toList()));
     res.loans = Map.from(json['Loans']).map((k, v) => MapEntry(
         k, List.of(v).map((e) => IncentiveItemData.fromJson(e)).toList()));
     return res;
@@ -13,7 +11,6 @@ class IncentivesData extends _IncentivesData {
 
 abstract class _IncentivesData {
   Map<String, List<IncentiveItemData>>? dex;
-  late Map<String, List<IncentiveItemData>> dexSaving;
   Map<String, List<IncentiveItemData>>? loans;
 }
 

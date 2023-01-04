@@ -13,7 +13,6 @@ import 'package:polkawallet_plugin_acala/polkawallet_plugin_acala.dart';
 import 'package:polkawallet_plugin_acala/utils/assets.dart';
 import 'package:polkawallet_plugin_acala/utils/format.dart';
 import 'package:polkawallet_plugin_acala/utils/i18n/index.dart';
-import 'package:polkawallet_sdk/plugin/store/balances.dart';
 import 'package:polkawallet_sdk/storage/keyring.dart';
 import 'package:polkawallet_sdk/utils/i18n.dart';
 import 'package:polkawallet_ui/components/tapTooltip.dart';
@@ -93,18 +92,12 @@ class EarnDetailPage extends StatelessWidget {
           }
 
           double rewardAPR = 0;
-          double savingRewardAPR = 0;
           double? loyaltyBonus = 0;
-          double? savingLoyaltyBonus = 0;
           final incentiveV2 = plugin.store!.earn.incentives;
           if (incentiveV2.dex != null) {
             (incentiveV2.dex![pool.tokenNameId!] ?? []).forEach((e) {
               rewardAPR += e.apr ?? 0;
               loyaltyBonus = e.deduction;
-            });
-            (incentiveV2.dexSaving[pool.tokenNameId!] ?? []).forEach((e) {
-              savingRewardAPR += e.apr ?? 0;
-              savingLoyaltyBonus = e.deduction;
             });
           }
 
@@ -241,8 +234,7 @@ class EarnDetailPage extends StatelessWidget {
                                             .textTheme
                                             .headline5
                                             ?.copyWith(color: Colors.white),
-                                        content: Fmt.ratio(
-                                            rewardAPR + savingRewardAPR),
+                                        content: Fmt.ratio(rewardAPR),
                                       ),
                                       // PluginInfoItem(
                                       //   crossAxisAlignment:
@@ -379,9 +371,7 @@ class EarnDetailPage extends StatelessWidget {
                           poolInfo: poolInfo,
                           poolSymbol: poolSymbol,
                           rewardAPY: rewardAPR,
-                          rewardSavingAPY: savingRewardAPR,
                           loyaltyBonus: loyaltyBonus,
-                          savingLoyaltyBonus: savingLoyaltyBonus,
                           fee: plugin.service!.earn.getSwapFee(),
                           incentiveCoinSymbol: symbols![0],
                           stableCoinSymbol: acala_stable_coin,
@@ -451,9 +441,7 @@ class _UserCard extends StatelessWidget {
     this.poolInfo,
     this.poolSymbol,
     this.rewardAPY,
-    this.rewardSavingAPY,
     this.loyaltyBonus,
-    this.savingLoyaltyBonus,
     this.fee,
     this.incentiveCoinSymbol,
     this.stableCoinSymbol,
@@ -466,9 +454,7 @@ class _UserCard extends StatelessWidget {
   final DexPoolInfoData? poolInfo;
   final String? poolSymbol;
   final double? rewardAPY;
-  final double? rewardSavingAPY;
   final double? loyaltyBonus;
-  final double? savingLoyaltyBonus;
   final double? fee;
   final String? incentiveCoinSymbol;
   final String? stableCoinSymbol;

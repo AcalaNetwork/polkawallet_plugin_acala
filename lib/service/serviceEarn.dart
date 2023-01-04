@@ -55,15 +55,6 @@ class ServiceEarn {
       });
     });
 
-    data.dexSaving.forEach((k, v) {
-      final poolInfo = store!.earn.dexPoolInfoMap[k];
-      v.forEach((e) {
-        e.apr = e.amount! > 0
-            ? e.amount! / (poolInfo!.sharesTotal! / poolInfo.issuance!)
-            : 0;
-      });
-    });
-
     final rewards = plugin.store!.loan.collateralRewards;
     data.loans!.forEach((k, v) {
       v.forEach((e) {

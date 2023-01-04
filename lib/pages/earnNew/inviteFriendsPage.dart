@@ -34,14 +34,10 @@ class InviteFriendsPage extends StatelessWidget {
     final size = MediaQuery.of(context).size.width - 32 * 2;
 
     double rewardAPR = 0;
-    double savingRewardAPR = 0;
     final incentiveV2 = plugin.store!.earn.incentives;
     if (incentiveV2.dex != null) {
       (incentiveV2.dex![pool.tokenNameId!] ?? []).forEach((e) {
         rewardAPR += e.apr ?? 0;
-      });
-      (incentiveV2.dexSaving[pool.tokenNameId!] ?? []).forEach((e) {
-        savingRewardAPR += e.apr ?? 0;
       });
     }
 
@@ -130,7 +126,7 @@ class InviteFriendsPage extends StatelessWidget {
                                 .textTheme
                                 .headline4
                                 ?.copyWith(color: Colors.white)),
-                        Text(Fmt.ratio(rewardAPR + savingRewardAPR),
+                        Text(Fmt.ratio(rewardAPR),
                             style: Theme.of(context)
                                 .textTheme
                                 .headline3

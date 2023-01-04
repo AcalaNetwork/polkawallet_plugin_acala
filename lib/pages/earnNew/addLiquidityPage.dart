@@ -723,16 +723,11 @@ class StakeLPTips extends StatelessWidget {
     final dic = I18n.of(context)!.getDic(i18n_full_dic_acala, 'acala');
     return Observer(builder: (_) {
       double rewardAPY = 0;
-      double savingRewardAPY = 0;
 
       if (plugin.store!.earn.incentives.dex != null) {
         (plugin.store!.earn.incentives.dex![pool!.tokenNameId!] ?? [])
             .forEach((e) {
           rewardAPY += e.apr ?? 0;
-        });
-        (plugin.store!.earn.incentives.dexSaving[pool!.tokenNameId!] ?? [])
-            .forEach((e) {
-          savingRewardAPY += e.apr ?? 0;
         });
       }
       final balanceInt = Fmt.balanceInt(
@@ -756,7 +751,7 @@ class StakeLPTips extends StatelessWidget {
                           color: Colors.white),
                     ),
                     Text(
-                      Fmt.ratio(rewardAPY + savingRewardAPY),
+                      Fmt.ratio(rewardAPY),
                       style: Theme.of(context).textTheme.headline3?.copyWith(
                           fontSize: UI.getTextSize(26, context),
                           color: PluginColorsDark.primary),

@@ -2,9 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:polkawallet_plugin_acala/api/types/dexPoolInfoData.dart';
-import 'package:polkawallet_plugin_acala/common/constants/index.dart';
 import 'package:polkawallet_plugin_acala/pages/earnNew/addLiquidityPage.dart';
 import 'package:polkawallet_plugin_acala/pages/earnNew/taigaAddLiquidityPage.dart';
 import 'package:polkawallet_plugin_acala/pages/earnNew/taigaWithdrawLiquidityPage.dart';
@@ -350,24 +348,6 @@ class _DexPoolCard extends StatelessWidget {
 
     final poolInfo = plugin!.store!.earn.dexPoolInfoMap[pool!.tokenNameId];
     bool canClaim = false;
-    double? savingLoyaltyBonus = 0;
-    final incentiveV2 = plugin!.store!.earn.incentives;
-    if (incentiveV2.dex != null) {
-      (incentiveV2.dexSaving[pool!.tokenNameId!] ?? []).forEach((e) {
-        savingLoyaltyBonus = e.deduction;
-      });
-    }
-    var rewardSaving =
-        (poolInfo?.reward?.saving ?? 0) * (1 - (savingLoyaltyBonus ?? 0));
-    if (rewardSaving < 0) {
-      rewardSaving = 0;
-    }
-    final savingRewardTokenMin = Fmt.balanceDouble(
-        plugin!.store!.assets.tokenBalanceMap[acala_stable_coin]!.minBalance!,
-        plugin!.networkState.tokenDecimals![
-            plugin!.networkState.tokenSymbol!.indexOf(acala_stable_coin)]);
-    canClaim = rewardSaving > savingRewardTokenMin;
-
     (poolInfo?.reward?.incentive ?? []).forEach((e) {
       final amount = double.parse(e['amount']);
       if (amount > 0.001) {
