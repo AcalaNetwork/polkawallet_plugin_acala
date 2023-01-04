@@ -5,9 +5,7 @@ import { subscribeMessage, getNetworkConst, getNetworkProperties } from "./servi
 import keyring from "./service/keyring";
 import { options } from "@acala-network/api";
 import { Wallet } from "@acala-network/sdk";
-// import account from "./service/account";
 import acala from "./service/acala";
-// import gov from "./service/gov";
 import xcm from "./service/xcm";
 import { genLinks } from "./utils/config/config";
 
@@ -75,7 +73,5 @@ async function test() {}
   genLinks,
 };
 (<any>window).keyring = keyring;
-// (<any>window).account = account;
 (<any>window).acala = acala;
-// (<any>window).gov = gov;
 (<any>window).xcm = xcm;

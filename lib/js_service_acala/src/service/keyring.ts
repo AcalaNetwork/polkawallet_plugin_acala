@@ -1,9 +1,7 @@
 import { keyExtractSuri, mnemonicGenerate, mnemonicValidate, cryptoWaitReady, signatureVerify, encodeAddress } from "@polkadot/util-crypto";
 import { hexToU8a, u8aToHex, isHex, stringToU8a } from "@polkadot/util";
 import BN from "bn.js";
-import { parseQrCode, getSigner, makeTx, getSubmittable } from "../utils/QrSigner";
-import metaDataMap from "../constants/networkMetadata";
-import { Metadata, TypeRegistry } from "@polkadot/types";
+import { parseQrCode, makeTx, getSubmittable } from "../utils/QrSigner";
 
 import { Keyring } from "@polkadot/keyring";
 import { KeypairType } from "@polkadot/util-crypto/types";
@@ -342,34 +340,35 @@ async function checkDerivePath(seed: string, derivePath: string, pairType: Keypa
  * sign tx with QR
  */
 async function signAsync(chain: string, password: string) {
-  return new Promise((resolve) => {
-    const { unsignedData } = getSigner();
-    const keyPair = keyring.getPair(unsignedData.data.account);
-    try {
-      if (!keyPair.isLocked) {
-        keyPair.lock();
-      }
-      keyPair.decodePkcs8(password);
+  return { error: "signature with QR was not supported." };
+  // return new Promise((resolve) => {
+  //   const { unsignedData } = getSigner();
+  //   const keyPair = keyring.getPair(unsignedData.data.account);
+  //   try {
+  //     if (!keyPair.isLocked) {
+  //       keyPair.lock();
+  //     }
+  //     keyPair.decodePkcs8(password);
 
-      let payload: any;
-      if (!(<any>window).api) {
-        const registry = new TypeRegistry();
-        registry.setMetadata(new Metadata(registry, metaDataMap[chain]));
-        payload = registry.createType("ExtrinsicPayload", unsignedData.data.data, {
-          version: 4,
-        });
-      } else {
-        payload = (<any>window).api.registry.createType("ExtrinsicPayload", unsignedData.data.data, {
-          version: (<any>window).api.extrinsicVersion,
-        });
-      }
+  //     let payload: any;
+  //     if (!(<any>window).api) {
+  //       const registry = new TypeRegistry();
+  //       registry.setMetadata(new Metadata(registry, metaDataMap[chain]));
+  //       payload = registry.createType("ExtrinsicPayload", unsignedData.data.data, {
+  //         version: 4,
+  //       });
+  //     } else {
+  //       payload = (<any>window).api.registry.createType("ExtrinsicPayload", unsignedData.data.data, {
+  //         version: (<any>window).api.extrinsicVersion,
+  //       });
+  //     }
 
-      const signed = payload.sign(keyPair);
-      resolve(signed);
-    } catch (err) {
-      resolve({ error: err.message });
-    }
-  });
+  //     const signed = payload.sign(keyPair);
+  //     resolve(signed);
+  //   } catch (err) {
+  //     resolve({ error: err.message });
+  //   }
+  // });
 }
 
 /**
@@ -422,13 +421,12 @@ async function signTxAsExtension(password: string, json: any) {
       }
       keyPair.decodePkcs8(password);
 
-      let registry: any;
       if (!(<any>window).api) {
-        registry = new TypeRegistry();
-        registry.setMetadata(new Metadata(registry, metaDataMap["acala-tc6"]));
-      } else {
-        registry = (<any>window).api.registry;
+        resolve({ error: "network not connected." });
+        return;
       }
+
+      const registry = (<any>window).api.registry;
 
       registry.setSignedExtensions(json["signedExtensions"]);
       const payload = registry.createType("ExtrinsicPayload", json, {

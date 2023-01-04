@@ -882,7 +882,6 @@ async function calcHomaNewMintAmount(api: ApiPromise, amount: number) {
   return {
     pay: result.pay.toNumber(),
     receive: result.receive.toChainData().toString(),
-    env: _formatHomaEnv(result.env),
   };
 }
 
@@ -897,7 +896,6 @@ async function calcHomaNewRedeemAmount(api: ApiPromise, amount: number, isFastRe
     receive: result.receive.toNumber(),
     fee: result.fee.toNumber(),
     canTryFastRedeem: result.canTryFastRedeem,
-    env: _formatHomaEnv(result.env),
   };
 }
 
