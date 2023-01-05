@@ -13,8 +13,8 @@ import 'package:polkawallet_sdk/utils/i18n.dart';
 import 'package:polkawallet_ui/components/txButton.dart';
 import 'package:polkawallet_ui/components/v3/plugin/pluginButton.dart';
 import 'package:polkawallet_ui/components/v3/plugin/pluginInputBalance.dart';
-import 'package:polkawallet_ui/components/v3/plugin/pluginPopLoadingWidget.dart';
 import 'package:polkawallet_ui/components/v3/plugin/pluginLoadingWidget.dart';
+import 'package:polkawallet_ui/components/v3/plugin/pluginPopLoadingWidget.dart';
 import 'package:polkawallet_ui/components/v3/plugin/pluginScaffold.dart';
 import 'package:polkawallet_ui/components/v3/plugin/pluginTextTag.dart';
 import 'package:polkawallet_ui/pages/txConfirmPage.dart';
@@ -213,7 +213,7 @@ class _MintPageState extends State<MintPage> {
         ))) as Map?;
 
     if (res != null) {
-      final data = ModalRoute.of(context)!.settings.arguments as Map;
+      final data = ModalRoute.of(context)!.settings.arguments as Map?;
       if (data != null &&
           data["selectMethod"] != null &&
           data["selectMethod"] &&
@@ -241,7 +241,7 @@ class _MintPageState extends State<MintPage> {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final data = ModalRoute.of(context)!.settings.arguments as Map;
+      final data = ModalRoute.of(context)!.settings.arguments as Map?;
       if (data != null && data["selectMethod"] != null) {
         _queryTaigaPoolInfo();
       }
@@ -272,7 +272,7 @@ class _MintPageState extends State<MintPage> {
 
         final minStake = widget.plugin.store!.homa.env!.mintThreshold;
 
-        final data = ModalRoute.of(context)!.settings.arguments as Map;
+        final data = ModalRoute.of(context)!.settings.arguments as Map?;
         bool isSelectMethod = false;
         if (data != null && data["selectMethod"] != null) {
           isSelectMethod = data["selectMethod"];

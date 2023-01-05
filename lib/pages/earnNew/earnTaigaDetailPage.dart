@@ -14,10 +14,10 @@ import 'package:polkawallet_ui/components/v3/plugin/pluginOutlinedButtonSmall.da
 import 'package:polkawallet_ui/components/v3/plugin/pluginScaffold.dart';
 import 'package:polkawallet_ui/components/v3/plugin/pluginTagCard.dart';
 import 'package:polkawallet_ui/components/v3/plugin/roundedPluginCard.dart';
+import 'package:polkawallet_ui/pages/DAppWrapperPage.dart';
 import 'package:polkawallet_ui/utils/consts.dart';
 import 'package:polkawallet_ui/utils/format.dart';
 import 'package:polkawallet_ui/utils/index.dart';
-import 'package:polkawallet_ui/pages/DAppWrapperPage.dart';
 
 class EarnTaigaDetailPage extends StatefulWidget {
   EarnTaigaDetailPage(this.plugin, this.keyring, {Key? key}) : super(key: key);
@@ -66,16 +66,10 @@ class _EarnTaigaDetailPageState extends State<EarnTaigaDetailPage> {
       body: Observer(builder: (_) {
         final taigaPool =
             widget.plugin.store!.earn.taigaPoolInfoMap[argsJson['poolId']];
-        final taigaData = widget.plugin.store!.earn.taigaTokenPairs
-            .firstWhere((element) => element.tokenNameId == argsJson['poolId']);
         final balance = AssetsUtils.getBalanceFromTokenNameId(
             widget.plugin, argsJson['poolId']);
         final price =
             AssetsUtils.getMarketPrice(widget.plugin, balance.symbol!);
-
-        final tokenPair = taigaData.tokens!
-            .map((e) => AssetsUtils.tokenDataFromCurrencyId(widget.plugin, e))
-            .toList();
 
         final tokenSymbol = balance.symbol;
         var totalStaked = 0.0;

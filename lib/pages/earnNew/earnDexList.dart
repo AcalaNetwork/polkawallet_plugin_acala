@@ -92,7 +92,7 @@ class _EarnDexListState extends State<EarnDexList> {
 
           dexPools[i].rewards = rewards + savingRewards;
           dexPools[i].rewardsLoyalty = rewards * (1 - loyaltyBonus!) +
-              savingRewards * (1 - savingLoyaltyBonus!);
+              savingRewards * (1 - savingLoyaltyBonus);
 
           double userReward = 0;
           final poolInfo =
@@ -406,8 +406,7 @@ class _EarnDexListState extends State<EarnDexList> {
                       bool unstaked = false;
                       final balance = AssetsUtils.getBalanceFromTokenNameId(
                           widget.plugin, dexPools[i].tokenNameId);
-                      if (balance != null &&
-                          Fmt.balanceInt(balance.amount) > BigInt.zero) {
+                      if (Fmt.balanceInt(balance.amount) > BigInt.zero) {
                         unstaked = true;
                       }
 

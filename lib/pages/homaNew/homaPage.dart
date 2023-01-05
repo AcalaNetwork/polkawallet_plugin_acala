@@ -40,7 +40,6 @@ class HomaPage extends StatefulWidget {
 
 class _HomaPageState extends State<HomaPage> {
   Timer? _timer;
-  String? _unlockingKsm;
 
   Future<void> _refreshData() async {
     widget.plugin.service!.assets.queryMarketPrices();

@@ -1,7 +1,6 @@
 import 'package:polkawallet_plugin_acala/api/assets/acalaServiceAssets.dart';
 import 'package:polkawallet_plugin_acala/api/types/nftData.dart';
 import 'package:polkawallet_plugin_acala/pages/assets/tokenDetailPage.dart';
-import 'package:polkawallet_plugin_acala/service/index.dart';
 import 'package:polkawallet_plugin_acala/utils/assets.dart';
 import 'package:polkawallet_plugin_acala/utils/format.dart';
 import 'package:polkawallet_sdk/plugin/store/balances.dart';
@@ -110,11 +109,11 @@ class AcalaApiAssets {
   }
 
   Future<List<NFTData>> queryNFTs(String? address) async {
-    final List res =
-        await (service.queryNFTs(address) as Future<List<dynamic>>);
+    final res = await service.queryNFTs(address);
     return res
-        .map((e) => NFTData.fromJson(Map<String, dynamic>.of(e)))
-        .toList();
+            ?.map((e) => NFTData.fromJson(Map<String, dynamic>.of(e)))
+            .toList() ??
+        [];
   }
 
   Future<Map?> queryAggregatedAssets(String? address) async {

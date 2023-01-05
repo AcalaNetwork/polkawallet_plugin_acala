@@ -567,7 +567,7 @@ class _BootstrapPageState extends State<BootstrapPage> {
 class ErrorMessage extends StatelessWidget {
   ErrorMessage(this.error, {this.margin, this.isRight = false});
   final error;
-  EdgeInsetsGeometry? margin;
+  final EdgeInsetsGeometry? margin;
   final bool isRight;
   @override
   Widget build(BuildContext context) {

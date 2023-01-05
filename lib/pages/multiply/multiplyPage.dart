@@ -219,8 +219,8 @@ class _MultiplyPageState extends State<MultiplyPage> {
 
 class LoanView extends StatelessWidget {
   LoanView(this._loan, this._prices, this.plugin, {Key? key}) : super(key: key);
-  LoanData _loan;
-  BigInt _prices;
+  final LoanData _loan;
+  final BigInt _prices;
   final PluginAcala plugin;
 
   @override
@@ -254,7 +254,7 @@ class LoanView extends StatelessWidget {
                       width: 150,
                       height: 150,
                       child: CustomPaint(
-                        painter: pieChartPainter(
+                        painter: PieChartPainter(
                             _loan.collateralInUSD / sumInUSD,
                             _loan.debitInUSD / sumInUSD),
                       ),

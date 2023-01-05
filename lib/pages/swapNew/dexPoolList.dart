@@ -133,11 +133,10 @@ class _DexPoolListState extends State<DexPoolList> {
 }
 
 class _TaigaDexPoolCard extends StatelessWidget {
-  _TaigaDexPoolCard({this.plugin, this.pool, this.poolAmount, this.tokenIcons});
+  _TaigaDexPoolCard({this.plugin, this.pool, this.tokenIcons});
 
   final PluginAcala? plugin;
   final DexPoolData? pool;
-  final List? poolAmount;
   final Map<String, Widget>? tokenIcons;
 
   @override
@@ -158,7 +157,7 @@ class _TaigaDexPoolCard extends StatelessWidget {
     var canClaim = false;
     final balance =
         AssetsUtils.getBalanceFromTokenNameId(plugin!, pool!.tokenNameId);
-    if (balance != null && Fmt.balanceInt(balance.amount) > BigInt.zero) {
+    if (Fmt.balanceInt(balance.amount) > BigInt.zero) {
       unstaked = true;
     }
     if (BigInt.parse(taigaPoolInfo?.userShares ?? "0") > BigInt.zero) {
@@ -358,7 +357,7 @@ class _DexPoolCard extends StatelessWidget {
     bool unstaked = false;
     final balance =
         AssetsUtils.getBalanceFromTokenNameId(plugin!, pool!.tokenNameId);
-    if (balance != null && Fmt.balanceInt(balance.amount) > BigInt.zero) {
+    if (Fmt.balanceInt(balance.amount) > BigInt.zero) {
       unstaked = true;
     }
 

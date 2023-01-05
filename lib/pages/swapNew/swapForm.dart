@@ -137,9 +137,7 @@ class _SwapFormState extends State<SwapForm>
           AssetsUtils.getBalanceFromTokenNameId(widget.plugin, _swapPair[1])
               .minBalance!,
           decimalReceive);
-      if ((balancePair[1] == null ||
-              Fmt.balanceDouble(balancePair[1].amount!, decimalReceive) ==
-                  0.0) &&
+      if ((Fmt.balanceDouble(balancePair[1].amount!, decimalReceive) == 0.0) &&
           double.parse(_amountReceiveCtrl.text) < receiveMin) {
         errorReceive =
             '${dic!['amount.min']} ${Fmt.priceCeil(receiveMin, lengthMax: 6)}';
@@ -1061,7 +1059,7 @@ class RouteWidget extends StatelessWidget {
   RouteWidget(this.plugin, {this.path, Key? key}) : super(key: key);
 
   final PluginAcala plugin;
-  List<PathData>? path;
+  final List<PathData>? path;
 
   @override
   Widget build(BuildContext context) {

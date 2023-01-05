@@ -649,6 +649,13 @@ class _LPStakePage extends State<LPStakePage> {
   }
 
   @override
+  void dispose() {
+    _timer?.cancel();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final dic = I18n.of(context)!.getDic(i18n_full_dic_acala, 'acala')!;
     final assetDic = I18n.of(context)!.getDic(i18n_full_dic_acala, 'common');

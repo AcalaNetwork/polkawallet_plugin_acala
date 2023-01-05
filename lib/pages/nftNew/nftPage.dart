@@ -1,13 +1,14 @@
 import 'dart:math';
 
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:polkawallet_plugin_acala/common/components/videoPlayerContainer.dart';
-import 'package:polkawallet_plugin_acala/polkawallet_plugin_acala.dart';
 import 'package:polkawallet_plugin_acala/api/types/nftData.dart';
+import 'package:polkawallet_plugin_acala/common/components/videoPlayerContainer.dart';
 import 'package:polkawallet_plugin_acala/pages/nftNew/nftTransferPage.dart';
+import 'package:polkawallet_plugin_acala/polkawallet_plugin_acala.dart';
 import 'package:polkawallet_plugin_acala/utils/i18n/index.dart';
 import 'package:polkawallet_sdk/storage/keyring.dart';
 import 'package:polkawallet_sdk/utils/i18n.dart';
@@ -18,7 +19,6 @@ import 'package:polkawallet_ui/components/v3/plugin/pluginAccountInfoAction.dart
 import 'package:polkawallet_ui/components/v3/plugin/pluginButton.dart';
 import 'package:polkawallet_ui/components/v3/plugin/pluginIconButton.dart';
 import 'package:polkawallet_ui/components/v3/plugin/pluginScaffold.dart';
-import 'package:card_swiper/card_swiper.dart';
 import 'package:polkawallet_ui/utils/consts.dart';
 import 'package:polkawallet_ui/utils/format.dart';
 import 'package:polkawallet_ui/utils/i18n.dart';
@@ -56,9 +56,7 @@ class _NftPageState extends State<NftPage> {
   Future<void> _queryNFTs() async {
     final nft = await widget.plugin.api!.assets
         .queryNFTs(widget.keyring.current.address);
-    if (nft != null) {
-      widget.plugin.store!.assets.setNFTs(nft);
-    }
+    widget.plugin.store!.assets.setNFTs(nft);
   }
 
   Future<void> _onTransfer(NFTData item) async {
@@ -405,7 +403,7 @@ class _NftPageState extends State<NftPage> {
                     Container(
                       width: double.infinity,
                       margin: EdgeInsets.only(left: 16, right: 16, bottom: 5),
-                      child: _tabBar(
+                      child: _TabBar(
                         list,
                         classes,
                         initIndex: _currentIndex,
@@ -424,19 +422,19 @@ class _NftPageState extends State<NftPage> {
   }
 }
 
-class _tabBar extends StatefulWidget {
-  _tabBar(this.nfts, this.datas, {Key? key, this.initIndex = 0, this.onChange})
+class _TabBar extends StatefulWidget {
+  _TabBar(this.nfts, this.datas, {Key? key, this.initIndex = 0, this.onChange})
       : super(key: key);
-  Map<dynamic, dynamic> datas;
-  List<NFTData> nfts;
-  int initIndex;
-  Function(int)? onChange;
+  final Map<dynamic, dynamic> datas;
+  final List<NFTData> nfts;
+  final int initIndex;
+  final Function(int)? onChange;
 
   @override
-  State<_tabBar> createState() => _tabBarState();
+  State<_TabBar> createState() => _TabBarState();
 }
 
-class _tabBarState extends State<_tabBar> {
+class _TabBarState extends State<_TabBar> {
   int _initIndex = 0;
   bool _isOpen = false;
 
@@ -447,7 +445,7 @@ class _tabBarState extends State<_tabBar> {
   }
 
   @override
-  void didUpdateWidget(covariant _tabBar oldWidget) {
+  void didUpdateWidget(covariant _TabBar oldWidget) {
     _initIndex = widget.initIndex;
     super.didUpdateWidget(oldWidget);
   }

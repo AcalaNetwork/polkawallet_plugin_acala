@@ -67,10 +67,10 @@ class RewardsChart extends StatelessWidget {
     );
   }
 
-  List<Color> gradientColors = [
+  final List<Color> gradientColors = [
     const Color(0xFFFFA07E),
   ];
-  List<Color> chartBelowBarColors = [
+  final List<Color> chartBelowBarColors = [
     const Color(0xFFFFA07E),
     const Color(0x12FFD0C0),
   ];

@@ -118,7 +118,7 @@ class _TransferPageState extends State<TransferPage> {
     print(_accountTo!.address);
   }
 
-  Future<String?> _updateAddressIcon(String address) async {
+  Future<void> _updateAddressIcon(String address) async {
     final res = await widget.plugin.sdk.api.account.getAddressIcons([address]);
     if (res != null && res.length > 0) {
       final acc = KeyPairData()

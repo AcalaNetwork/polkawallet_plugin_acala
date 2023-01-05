@@ -147,7 +147,7 @@ class TxSwapData extends _TxSwapData {
                 tokenPair[index].decimals ?? 12,
                 lengthMax: 6);
           }
-          data.amounts.add(_token()
+          data.amounts.add(_Token()
             ..amount = amount
             ..symbol = element.symbol);
         });
@@ -181,10 +181,10 @@ abstract class _TxSwapData {
   late String time;
   bool? isSuccess;
   bool isTaiga = false;
-  List<_token> amounts = [];
+  List<_Token> amounts = [];
 }
 
-class _token {
+class _Token {
   String? symbol;
   String? amount;
 

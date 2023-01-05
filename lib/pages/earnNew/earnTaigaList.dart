@@ -75,11 +75,6 @@ class _EarnTaigaListState extends State<EarnTaigaList> {
                                 element.tokenNameId ==
                                 dexPools.keys.toList()[i]);
 
-                        final tokenPair = taigaData.tokens!
-                            .map((e) => AssetsUtils.tokenDataFromCurrencyId(
-                                widget.plugin, e))
-                            .toList();
-
                         var totalStaked = 0.0;
                         if (tokenSymbol == "tDOT") {
                           totalStaked = Fmt.balanceDouble(
@@ -106,10 +101,6 @@ class _EarnTaigaListState extends State<EarnTaigaList> {
                         if (claim > BigInt.zero) {
                           canClaim = true;
                         }
-
-                        final tokenPairView = tokenPair
-                            .map((e) => PluginFmt.tokenView(e.symbol))
-                            .join('-');
 
                         return GestureDetector(
                           child: RoundedPluginCard(

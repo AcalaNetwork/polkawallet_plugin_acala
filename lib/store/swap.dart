@@ -34,7 +34,7 @@ class SwapStore {
     if (pubKey == null || pubKey.isEmpty) return;
 
     final _swapPair = cache!.swapPair.val;
-    if (_swapPair != null && _swapPair[pubKey] != null) {
+    if (_swapPair[pubKey] != null) {
       var data = jsonDecode(_swapPair[pubKey]).cast<String>();
       setSwapPair([data[0], data[1]], pubKey);
     }

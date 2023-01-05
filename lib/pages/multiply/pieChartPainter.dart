@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-class pieChartPainter extends CustomPainter {
-  pieChartPainter(this.collateralRatio, this.debitRatio);
+class PieChartPainter extends CustomPainter {
+  PieChartPainter(this.collateralRatio, this.debitRatio);
   double collateralRatio;
   double debitRatio;
 
@@ -43,7 +43,7 @@ class pieChartPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(pieChartPainter oldDelegate) =>
+  bool shouldRepaint(PieChartPainter oldDelegate) =>
       oldDelegate.collateralRatio != collateralRatio ||
       oldDelegate.debitRatio != debitRatio;
 }

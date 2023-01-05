@@ -10,16 +10,12 @@ class WalletApi {
   static Future<Map?> getTokenPrice(List<String?> tokens) async {
     final url = '$_endpoint/price-server?from=market&token=${tokens.join(',')}';
     try {
-      Response res = await get(Uri.parse(url));
-      if (res == null) {
-        return null;
-      } else {
-        final data =
-            jsonDecode(utf8.decode(res.bodyBytes))['data']['price'] as List;
-        return data
-            .asMap()
-            .map((k, v) => MapEntry(tokens[k], double.parse(v.toString())));
-      }
+      final res = await get(Uri.parse(url));
+      final data =
+          jsonDecode(utf8.decode(res.bodyBytes))['data']['price'] as List;
+      return data
+          .asMap()
+          .map((k, v) => MapEntry(tokens[k], double.parse(v.toString())));
     } catch (err) {
       print(err);
       return null;
@@ -30,12 +26,8 @@ class WalletApi {
     final url = '$_configEndpoint/config/acalaConfig.json';
     // final url = '$_endpoint/devConfiguration/config/acalaConfig.json';
     try {
-      Response res = await get(Uri.parse(url));
-      if (res == null) {
-        return null;
-      } else {
-        return jsonDecode(utf8.decode(res.bodyBytes));
-      }
+      final res = await get(Uri.parse(url));
+      return jsonDecode(utf8.decode(res.bodyBytes));
     } catch (err) {
       print(err);
       return null;
@@ -44,13 +36,9 @@ class WalletApi {
 
   static Future<Map?> getTokenIcons() async {
     try {
-      Response res =
+      final res =
           await get(Uri.parse('https://resources.acala.network/tokens.json'));
-      if (res == null) {
-        return null;
-      } else {
-        return jsonDecode(utf8.decode(res.bodyBytes));
-      }
+      return jsonDecode(utf8.decode(res.bodyBytes));
     } catch (err) {
       print(err);
       return null;
@@ -59,13 +47,9 @@ class WalletApi {
 
   static Future<Map?> getCrossChainIcons() async {
     try {
-      Response res =
+      final res =
           await get(Uri.parse('https://resources.acala.network/chains.json'));
-      if (res == null) {
-        return null;
-      } else {
-        return jsonDecode(utf8.decode(res.bodyBytes));
-      }
+      return jsonDecode(utf8.decode(res.bodyBytes));
     } catch (err) {
       print(err);
       return null;

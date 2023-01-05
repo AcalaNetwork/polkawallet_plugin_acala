@@ -106,21 +106,6 @@ class ServiceEarn {
         plugin.networkConst['dex']['getExchangeFee'][1];
   }
 
-  Future<void> updateDexPoolInfo({String? poolId}) async {
-    // 1. query all dexPools
-    if (store!.earn.dexPools.length == 0) {
-      await getDexPools();
-    }
-    // 2. default poolId is the first pool or KAR-kUSD
-    final tabNow = poolId ??
-        (store!.earn.dexPools.length > 0
-            ? store!.earn.dexPools[0].tokenNameId
-            : 'lp://ACA/AUSD');
-    // 3. query mining pool info
-    await Future.wait(
-        [queryDexPoolInfo(), plugin.service!.assets.queryMarketPrices()]);
-  }
-
   Future<void> updateAllDexPoolInfo() async {
     if (store!.earn.dexPools.length == 0) {
       await getDexPools();

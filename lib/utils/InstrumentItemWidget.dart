@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 
 class InstrumentItemWidget extends StatefulWidget {
   final List<InstrumentData> datas;
-  int initializeIndex;
+  final int initializeIndex;
   final Size size;
-  InstrumentItemWidgetController controller;
-  Function(int, bool isOnClick)? onChanged;
+  final InstrumentItemWidgetController controller;
+  final Function(int, bool isOnClick)? onChanged;
   InstrumentItemWidget(
       {Key? key,
       required this.controller,
@@ -64,12 +64,11 @@ class _InstrumentItemWidgetState extends State<InstrumentItemWidget>
           setState(() {
             isSwitching = false;
             this.animationNumber = 1;
-            widget.initializeIndex =
-                widget.initializeIndex + 1 >= widget.datas.length
-                    ? 0
-                    : widget.initializeIndex + 1;
+            final newIndex = widget.initializeIndex + 1 >= widget.datas.length
+                ? 0
+                : widget.initializeIndex + 1;
             if (widget.onChanged != null) {
-              widget.onChanged!(widget.initializeIndex, isOnClick);
+              widget.onChanged!(newIndex, isOnClick);
             }
           });
         }

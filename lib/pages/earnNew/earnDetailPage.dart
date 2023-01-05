@@ -661,7 +661,7 @@ class _UserCard extends StatelessWidget {
 
 class InviteFriendsBtn extends StatefulWidget {
   InviteFriendsBtn({Key? key, this.onTap}) : super(key: key);
-  Function()? onTap;
+  final Function()? onTap;
 
   @override
   State<InviteFriendsBtn> createState() => _InviteFriendsBtnState();

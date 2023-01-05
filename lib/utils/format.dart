@@ -67,7 +67,7 @@ class PluginFmt {
   }
 
   static Size boundingTextSize(String text, TextStyle? style) {
-    if (text == null || text.isEmpty) {
+    if (text.isEmpty) {
       return Size.zero;
     }
     final TextPainter textPainter = TextPainter(

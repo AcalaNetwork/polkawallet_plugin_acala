@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:polkawallet_plugin_acala/api/history/types/historyData.dart';
 import 'package:polkawallet_plugin_acala/polkawallet_plugin_acala.dart';
 import 'package:polkawallet_plugin_acala/utils/assets.dart';

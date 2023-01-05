@@ -108,7 +108,7 @@ abstract class _AssetsStore with Store {
     if (pubKey == null || pubKey.isEmpty) return;
 
     final cachedTokens = cache!.tokens.val;
-    if (cachedTokens != null && cachedTokens[pubKey] != null) {
+    if (cachedTokens[pubKey] != null) {
       final tokens = cachedTokens[pubKey].values.toList();
       tokens.retainWhere((e) => e['tokenNameId'] != null);
       setTokenBalanceMap(
@@ -131,8 +131,7 @@ abstract class _AssetsStore with Store {
     }
 
     final cachedAggregatedAssets = cache!.aggregatedAssets.val;
-    if (cachedAggregatedAssets != null &&
-        cachedAggregatedAssets[pubKey] != null) {
+    if (cachedAggregatedAssets[pubKey] != null) {
       aggregatedAssets = cachedAggregatedAssets[pubKey];
     } else {
       aggregatedAssets = {};

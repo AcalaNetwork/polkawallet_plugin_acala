@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
-import 'package:polkawallet_plugin_acala/api/history/types/historyData.dart';
+import 'package:polkawallet_plugin_acala/api/types/txLoanData.dart';
+import 'package:polkawallet_plugin_acala/pages/loanNew/loanTxDetailPage.dart';
 import 'package:polkawallet_plugin_acala/polkawallet_plugin_acala.dart';
 import 'package:polkawallet_plugin_acala/utils/i18n/index.dart';
 import 'package:polkawallet_sdk/storage/keyring.dart';
@@ -12,8 +13,6 @@ import 'package:polkawallet_ui/components/v3/plugin/pluginFilterWidget.dart';
 import 'package:polkawallet_ui/components/v3/plugin/pluginPopLoadingWidget.dart';
 import 'package:polkawallet_ui/components/v3/plugin/pluginScaffold.dart';
 import 'package:polkawallet_ui/utils/format.dart';
-import 'package:polkawallet_plugin_acala/api/types/txLoanData.dart';
-import 'package:polkawallet_plugin_acala/pages/loanNew/loanTxDetailPage.dart';
 import 'package:polkawallet_ui/utils/index.dart';
 
 class LoanHistoryPage extends StatefulWidget {

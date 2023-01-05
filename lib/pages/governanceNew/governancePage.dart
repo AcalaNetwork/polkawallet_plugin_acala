@@ -696,8 +696,8 @@ class _GovernancePageState extends State<GovernancePage> {
 }
 
 class CustomP extends StatelessWidget {
-  var _currentIndex;
-  var _count;
+  final _currentIndex;
+  final _count;
   CustomP(this._currentIndex, this._count);
   @override
   Widget build(BuildContext context) {

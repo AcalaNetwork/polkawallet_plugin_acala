@@ -271,9 +271,7 @@ class PluginAcala extends PolkawalletPlugin {
     _subscribeOraclePricesWithLoans(acc);
 
     final nft = await _api!.assets.queryNFTs(acc.address);
-    if (nft != null) {
-      _store!.assets.setNFTs(nft);
-    }
+    _store!.assets.setNFTs(nft);
   }
 
   // we use this oracle price for lcDOT value calculation

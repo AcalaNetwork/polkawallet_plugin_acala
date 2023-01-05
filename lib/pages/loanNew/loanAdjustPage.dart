@@ -22,7 +22,6 @@ import 'package:polkawallet_ui/components/v3/txButton.dart';
 import 'package:polkawallet_ui/pages/v3/txConfirmPage.dart';
 import 'package:polkawallet_ui/utils/consts.dart';
 import 'package:polkawallet_ui/utils/format.dart';
-import 'package:polkawallet_ui/utils/i18n.dart';
 import 'package:polkawallet_ui/utils/index.dart';
 
 class LoanAdjustPage extends StatefulWidget {
@@ -896,9 +895,8 @@ class _LoanAdjustPageState extends State<LoanAdjustPage> {
               });
           return null;
         }
-        final bool canContinue = await (_confirmPaybackParams(
-                '${dic!['loan.warn4']}$minimumDebitValue ${dic['loan.warn5']}')
-            as Future<bool>);
+        final bool canContinue = await UI.confirm(context,
+            '${dic!['loan.warn4']}$minimumDebitValue ${dic['loan.warn5']}');
         if (!canContinue) return null;
         debitS = loan.type.debitToDebitShare(
             loan.type.minimumDebitValue + BigInt.from(10000));
@@ -951,30 +949,5 @@ class _LoanAdjustPageState extends State<LoanAdjustPage> {
                 : loan.type.debitShareToDebit(debitS).toString()
       ]
     };
-  }
-
-  Future<bool?> _confirmPaybackParams(String message) async {
-    final dic = I18n.of(context)!.getDic(i18n_full_dic_acala, 'acala')!;
-    final bool? res = await showCupertinoDialog(
-        context: context,
-        builder: (_) {
-          return PolkawalletAlertDialog(
-            content: Text(message),
-            actions: <Widget>[
-              PolkawalletActionSheetAction(
-                child: Text(I18n.of(context)!
-                    .getDic(i18n_full_dic_ui, 'common')!['cancel']!),
-                onPressed: () => Navigator.of(context).pop(false),
-              ),
-              PolkawalletActionSheetAction(
-                isDefaultAction: true,
-                child: Text(I18n.of(context)!
-                    .getDic(i18n_full_dic_acala, 'common')!['ok']!),
-                onPressed: () => Navigator.of(context).pop(true),
-              )
-            ],
-          );
-        });
-    return res;
   }
 }
