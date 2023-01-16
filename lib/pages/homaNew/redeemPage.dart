@@ -219,7 +219,7 @@ class _RedeemPageState extends State<RedeemPage> {
             ?.copyWith(color: Colors.white),
       ),
       dic['dex.receive']!: Text(
-        '≈ ${Fmt.priceFloor((_selectIndex == 0 ? _fastReceiveAmount : _selectIndex == 1 ? _swapAmount : _receiveAmount) as double?, lengthMax: 8)} $stakeToken',
+        '≈ ${Fmt.priceFloor((_selectIndex == 0 ? _fastReceiveAmount : _selectIndex == 1 ? _swapAmount : _receiveAmount).toDouble(), lengthMax: 8)} $stakeToken',
         style: Theme.of(context)
             .textTheme
             .headline1
@@ -234,6 +234,7 @@ class _RedeemPageState extends State<RedeemPage> {
       false,
     ];
     String? paramsRaw;
+    String? txHex;
     if (_selectIndex == 0 && _fastReceiveAmount > 0) {
       //fast redeem
       module = 'utility';
@@ -258,12 +259,13 @@ class _RedeemPageState extends State<RedeemPage> {
         params = [];
         paramsRaw = '[['
             'api.tx.homa.requestRedeem(...${jsonEncode([0, false])}),'
-            'api.tx.${_swapOutput.tx!["section"]}.${_swapOutput.tx!["method"]}(...${jsonEncode(_swapOutput.tx!["params"])})'
+            'api.tx("${_swapOutput.tx!["txHex"]}")'
             ']]';
       } else {
         module = _swapOutput.tx!["section"];
         call = _swapOutput.tx!["method"];
         params = _swapOutput.tx!["params"];
+        txHex = _swapOutput.tx!["txHex"];
       }
     }
 
@@ -280,6 +282,7 @@ class _RedeemPageState extends State<RedeemPage> {
           txDisplayBold: txDisplay,
           params: params,
           rawParams: paramsRaw,
+          txHex: txHex,
           isPlugin: true,
         ))) as Map?;
 
