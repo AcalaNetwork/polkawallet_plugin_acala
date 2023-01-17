@@ -547,7 +547,7 @@ async function fetchHomaUserInfo(api: ApiPromise, address: string) {
   };
 }
 
-const NFT_CLASS_ALL = [0, 1, 2, 3, 4, 5];
+const NFT_CLASS_ALL = [0, 1, 4];
 async function _transformClassInfo(api: ApiPromise, id: number, data: any): Promise<Omit<any, "tokenId">> {
   const cid = hexToString(data.metadata.toString());
   const _properties = api.createType("Properties", data.data.properties.toU8a());
@@ -586,7 +586,7 @@ async function _transformClassInfo(api: ApiPromise, id: number, data: any): Prom
       description,
       dwebImage,
       imageIpfsUrl: _getImageUrl(dwebImage),
-      imageServiceUrl: serviceImage,
+      imageServiceUrl: dwebImage.replace("acala.subdao.com", "acala.polkawallet-cloud.com"),
       name,
     },
     metadataIpfsUrl,

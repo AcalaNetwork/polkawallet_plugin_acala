@@ -84,7 +84,7 @@ class _NftPageState extends State<NftPage> {
               itemBuilder: (context, index) {
                 final item = list.firstWhere(
                     (e) => e.classId == classes.keys.toList()[index]);
-                final imageUrl = item.metadata!['dwebImage'] as String;
+                final imageUrl = item.metadata!['imageServiceUrl'] ?? '';
                 return Container(
                   decoration: BoxDecoration(
                       color: Colors.white,
