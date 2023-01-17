@@ -21,9 +21,9 @@ class AcalaServiceAssets {
     return res;
   }
 
-  Future<Map> getTokenPrices(List<String> tokens) async {
+  Future<Map> getTokenPrices(List<String> tokens, int type) async {
     final Map? res = await plugin.sdk.webView!
-        .evalJavascript('acala.getTokenPrices(${jsonEncode(tokens)})');
+        .evalJavascript('acala.getTokenPrices(${jsonEncode(tokens)}, $type)');
     return res ?? {};
   }
 
@@ -99,17 +99,16 @@ class AcalaServiceAssets {
 
   Future<void> subscribeTokenPrices(
       Function(Map<String, BigInt>) callback) async {
-    final loanTypes = plugin.store?.loan.loanTypes
-        .map((e) => e.token?.tokenNameId ?? '')
-        .toList();
-    loanTypes?.removeWhere((e) => e == 'LDOT');
+    final tokens = plugin.store?.loan.loanTypes
+            .map((e) => e.token?.tokenNameId ?? '')
+            .toList() ??
+        [];
 
-    final List? res = await plugin.sdk.webView!.evalJavascript(
-        'acala.queryTokenPriceFromOracle(api, ${jsonEncode(loanTypes)})');
+    final res = await plugin.api?.assets.getTokenPrices(tokens, 2);
     if (res != null) {
       final prices = Map<String, BigInt>();
-      loanTypes?.asMap().forEach((i, e) {
-        prices[e] = Fmt.balanceInt(res[i]);
+      res.forEach((k, v) {
+        prices[k] = Fmt.balanceInt(v.toString());
       });
       callback(prices);
     }

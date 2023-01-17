@@ -32,10 +32,14 @@ class AcalaApiAssets {
     return res;
   }
 
-  Future<Map<String, num>> getTokenPrices(List<String> tokens) async {
+  /// @type:
+  /// 'AGGREGATE' = 0,
+  /// 'MARKET' = 1,
+  /// 'ORACLE' = 2,
+  /// 'DEX' = 3
+  Future<Map> getTokenPrices(List<String> tokens, int type) async {
     tokens.add('ACA');
-    final res = await service.getTokenPrices(tokens);
-    return Map<String, num>.from(res);
+    return service.getTokenPrices(tokens, type);
   }
 
   void unsubscribeTokenBalances(String? address) {
