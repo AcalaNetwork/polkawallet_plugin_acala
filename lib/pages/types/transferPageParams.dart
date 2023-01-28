@@ -12,7 +12,6 @@ class TransferPageParams extends _TransferPageParams {
 abstract class _TransferPageParams {
   String? tokenNameId;
   String? address;
-  String? isXCM = 'false'; // 'true' or 'false'
   String? chainFrom;
   String? chainTo;
 }
