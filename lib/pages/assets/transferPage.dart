@@ -28,6 +28,7 @@ import 'package:polkawallet_ui/components/v3/dialog.dart';
 import 'package:polkawallet_ui/components/v3/index.dart' as v3;
 import 'package:polkawallet_ui/components/v3/roundedCard.dart';
 import 'package:polkawallet_ui/components/v3/txButton.dart';
+import 'package:polkawallet_ui/components/v3/warningRow.dart';
 import 'package:polkawallet_ui/pages/scanPage.dart';
 import 'package:polkawallet_ui/utils/format.dart';
 import 'package:polkawallet_ui/utils/i18n.dart';
@@ -297,67 +298,53 @@ class _TransferPageState extends State<TransferPage> {
             margin: EdgeInsets.fromLTRB(16, 8, 16, 16),
             child: Observer(
               builder: (_) {
-                final dicAcala = I18n.of(context)!
-                    .getDic(i18n_full_dic_acala, 'acala')!;
+                final dicAcala =
+                    I18n.of(context)!.getDic(i18n_full_dic_acala, 'acala')!;
 
                 final tokenSymbol = token.symbol!.toUpperCase();
                 final tokenView = PluginFmt.tokenView(token.symbol);
 
                 final nativeTokenBalance = Fmt.balanceInt(
-                    widget.plugin.balances.native?.freeBalance) -
+                        widget.plugin.balances.native?.freeBalance) -
+                    Fmt.balanceInt(widget.plugin.balances.native?.frozenFee);
+                final notTransferable = Fmt.balanceInt(
+                        (widget.plugin.balances.native?.reservedBalance ?? 0)
+                            .toString()) +
                     Fmt.balanceInt(
-                        widget.plugin.balances.native?.frozenFee);
-                final notTransferable = Fmt.balanceInt((widget.plugin
-                    .balances.native?.reservedBalance ??
-                    0)
-                    .toString()) +
-                    Fmt.balanceInt(
-                        (widget.plugin.balances.native?.lockedBalance ??
-                            0)
+                        (widget.plugin.balances.native?.lockedBalance ?? 0)
                             .toString());
                 final accountED = _keepAlive
                     ? PluginFmt.getAccountED(widget.plugin)
                     : BigInt.zero;
-                final isNativeTokenLow = nativeTokenBalance -
-                    accountED <
+                final isNativeTokenLow = nativeTokenBalance - accountED <
                     Fmt.balanceInt((_fee?.partialFee ?? 0).toString()) *
                         BigInt.two;
                 final isAccountNormal =
                     (_accountSysInfo['consumers'] as int?) == 0 ||
-                        ((_accountSysInfo['providers'] as int?) ?? 0) >
-                            0;
+                        ((_accountSysInfo['providers'] as int?) ?? 0) > 0;
 
-                final balanceData =
-                AssetsUtils.getBalanceFromTokenNameId(
+                final balanceData = AssetsUtils.getBalanceFromTokenNameId(
                     widget.plugin, token.tokenNameId);
                 final available = Fmt.balanceInt(balanceData.amount) -
                     Fmt.balanceInt(balanceData.locked);
-                final nativeToken =
-                widget.plugin.networkState.tokenSymbol![0];
+                final nativeToken = widget.plugin.networkState.tokenSymbol![0];
                 final nativeTokenDecimals =
-                widget.plugin.networkState.tokenDecimals![widget
-                    .plugin.networkState.tokenSymbol!
-                    .indexOf(nativeToken)];
+                    widget.plugin.networkState.tokenDecimals![widget
+                        .plugin.networkState.tokenSymbol!
+                        .indexOf(nativeToken)];
                 final existDeposit = token.tokenNameId == nativeToken
-                    ? Fmt.balanceInt(widget.plugin
-                    .networkConst['balances']['existentialDeposit']
-                    .toString())
-                    : Fmt.balanceInt(widget
-                    .plugin
-                    .store!
-                    .assets
-                    .tokenBalanceMap[token.tokenNameId]!
-                    .minBalance);
-                final fee =
-                Fmt.balanceInt((_fee?.partialFee ?? 0).toString());
+                    ? Fmt.balanceInt(widget
+                        .plugin.networkConst['balances']['existentialDeposit']
+                        .toString())
+                    : Fmt.balanceInt(widget.plugin.store!.assets
+                        .tokenBalanceMap[token.tokenNameId]!.minBalance);
+                final fee = Fmt.balanceInt((_fee?.partialFee ?? 0).toString());
                 BigInt max = available;
                 if (tokenSymbol == nativeToken) {
                   max = notTransferable > BigInt.zero
                       ? notTransferable > accountED
-                      ? available - fee
-                      : available -
-                      (accountED - notTransferable) -
-                      fee
+                          ? available - fee
+                          : available - (accountED - notTransferable) - fee
                       : available - accountED - fee;
                 }
                 if (max < BigInt.zero) {
@@ -372,12 +359,12 @@ class _TransferPageState extends State<TransferPage> {
                     .textTheme
                     .headline5
                     ?.copyWith(
-                    height: 1,
-                    fontWeight: FontWeight.w300,
-                    fontSize: 12,
-                    color: UI.isDarkTheme(context)
-                        ? Colors.white
-                        : Color(0xBF565554));
+                        height: 1,
+                        fontWeight: FontWeight.w300,
+                        fontSize: 12,
+                        color: UI.isDarkTheme(context)
+                            ? Colors.white
+                            : Color(0xBF565554));
                 final infoValueStyle = Theme.of(context)
                     .textTheme
                     .headline5!
@@ -386,8 +373,7 @@ class _TransferPageState extends State<TransferPage> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    ConnectionChecker(widget.plugin,
-                        onConnected: _fetchData),
+                    ConnectionChecker(widget.plugin, onConnected: _fetchData),
                     Text(dic['address.from'] ?? '', style: labelStyle),
                     Padding(
                         padding: EdgeInsets.only(top: 3),
@@ -419,18 +405,30 @@ class _TransferPageState extends State<TransferPage> {
                                 margin: EdgeInsets.only(top: 4),
                                 child: Text(_accountToError ?? "",
                                     style: TextStyle(
-                                        fontSize:
-                                        UI.getTextSize(12, context),
+                                        fontSize: UI.getTextSize(12, context),
                                         color: Colors.red)),
                               )),
-                          Container(height: 10.h),
+                          Container(
+                            margin: EdgeInsets.only(top: 6, bottom: 4),
+                            child: Text(dic['network']!, style: labelStyle),
+                          ),
+                          RoundedCard(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
+                            margin: EdgeInsets.only(bottom: 8),
+                            child: CurrencyWithIcon(
+                              widget.plugin.basic.name!.toUpperCase(),
+                              TokenIcon(nativeToken, widget.plugin.tokenIcons),
+                            ),
+                          ),
+                          WarningRow(dic['network.warn']!),
                           v3.TextInputWidget(
                             autovalidateMode:
-                            AutovalidateMode.onUserInteraction,
+                                AutovalidateMode.onUserInteraction,
                             decoration: v3.InputDecorationV3(
                               hintText: dic['amount.hint'],
                               labelText:
-                              '${dic['amount']} (${dic['balance']}: ${Fmt.priceFloorBigInt(
+                                  '${dic['amount']} (${dic['balance']}: ${Fmt.priceFloorBigInt(
                                 available,
                                 token.decimals!,
                                 lengthMax: 6,
@@ -438,22 +436,20 @@ class _TransferPageState extends State<TransferPage> {
                               labelStyle: labelStyle,
                               suffix: fee > BigInt.zero
                                   ? GestureDetector(
-                                child: Text(dic['amount.max']!,
-                                    style: TextStyle(
-                                        fontWeight:
-                                        FontWeight.bold,
-                                        color: Theme.of(context)
-                                            .toggleableActiveColor)),
-                                onTap: () {
-                                  setState(() {
-                                    _amountMax = max;
-                                    _amountCtrl.text =
-                                        Fmt.bigIntToDouble(max,
-                                            token.decimals!)
-                                            .toStringAsFixed(8);
-                                  });
-                                },
-                              )
+                                      child: Text(dic['amount.max']!,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Theme.of(context)
+                                                  .toggleableActiveColor)),
+                                      onTap: () {
+                                        setState(() {
+                                          _amountMax = max;
+                                          _amountCtrl.text = Fmt.bigIntToDouble(
+                                                  max, token.decimals!)
+                                              .toStringAsFixed(8);
+                                        });
+                                      },
+                                    )
                                   : null,
                             ),
                             inputFormatters: [
@@ -461,28 +457,25 @@ class _TransferPageState extends State<TransferPage> {
                             ],
                             controller: _amountCtrl,
                             keyboardType:
-                            TextInputType.numberWithOptions(
-                                decimal: true),
+                                TextInputType.numberWithOptions(decimal: true),
                             onChanged: (_) {
                               setState(() {
                                 _amountMax = null;
                               });
                             },
                             validator: (v) {
-                              final error =
-                              Fmt.validatePrice(v!, context);
+                              final error = Fmt.validatePrice(v!, context);
                               if (error != null) {
                                 return error;
                               }
 
-                              final input = Fmt.tokenInt(
-                                  v.trim(), token.decimals!);
+                              final input =
+                                  Fmt.tokenInt(v.trim(), token.decimals!);
                               if (_amountMax == null &&
-                                  Fmt.bigIntToDouble(
-                                      input, token.decimals!) >
+                                  Fmt.bigIntToDouble(input, token.decimals!) >
                                       max /
-                                          BigInt.from(pow(
-                                              10, token.decimals!))) {
+                                          BigInt.from(
+                                              pow(10, token.decimals!))) {
                                 return dic['amount.low'];
                               }
                               return null;
@@ -492,25 +485,15 @@ class _TransferPageState extends State<TransferPage> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(top: 8, bottom: 8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(bottom: 4),
-                            child: Text(dic['currency']!,
-                                style: labelStyle),
-                          ),
-                          RoundedCard(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 8),
-                            child: CurrencyWithIcon(
-                              tokenView,
-                              TokenIcon(tokenSymbol,
-                                  widget.plugin.tokenIcons),
-                            ),
-                          )
-                        ],
+                      margin: EdgeInsets.only(top: 8, bottom: 4),
+                      child: Text(dic['currency']!, style: labelStyle),
+                    ),
+                    RoundedCard(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      child: CurrencyWithIcon(
+                        tokenView,
+                        TokenIcon(tokenSymbol, widget.plugin.tokenIcons),
                       ),
                     ),
                     Visibility(
@@ -523,39 +506,28 @@ class _TransferPageState extends State<TransferPage> {
                       child: Column(
                         children: [
                           Container(
-                            padding:
-                            EdgeInsets.symmetric(horizontal: 16.w),
+                            padding: EdgeInsets.symmetric(horizontal: 16.w),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 Expanded(
                                   child: Container(
-                                      padding:
-                                      EdgeInsets.only(right: 60),
+                                      padding: EdgeInsets.only(right: 60),
                                       child: Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                            MainAxisAlignment.center,
                                         children: [
-                                          Text(
-                                              dicAcala[
-                                              'transfer.exist']!,
-                                              style:
-                                              labelStyle?.copyWith(
-                                                  fontWeight:
-                                                  FontWeight
-                                                      .w400)),
+                                          Text(dicAcala['transfer.exist']!,
+                                              style: labelStyle?.copyWith(
+                                                  fontWeight: FontWeight.w400)),
                                           Padding(
-                                              padding: EdgeInsets.only(
-                                                  top: 2),
+                                              padding: EdgeInsets.only(top: 2),
                                               child: Text(
-                                                  dicAcala[
-                                                  'cross.exist.msg']!,
+                                                  dicAcala['cross.exist.msg']!,
                                                   style: subTitleStyle
-                                                      ?.copyWith(
-                                                      height:
-                                                      1.3))),
+                                                      ?.copyWith(height: 1.3))),
                                         ],
                                       )),
                                 ),
@@ -569,27 +541,20 @@ class _TransferPageState extends State<TransferPage> {
                               visible: _fee?.partialFee != null,
                               child: Column(children: [
                                 Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 6),
+                                    padding: EdgeInsets.symmetric(vertical: 6),
                                     child: Divider(height: 1)),
                                 Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 16.w),
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 16.w),
                                   child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Expanded(
                                         child: Padding(
-                                          padding:
-                                          EdgeInsets.only(right: 4),
-                                          child: Text(
-                                              dicAcala['transfer.fee']!,
-                                              style:
-                                              labelStyle?.copyWith(
-                                                  fontWeight:
-                                                  FontWeight
-                                                      .w400)),
+                                          padding: EdgeInsets.only(right: 4),
+                                          child: Text(dicAcala['transfer.fee']!,
+                                              style: labelStyle?.copyWith(
+                                                  fontWeight: FontWeight.w400)),
                                         ),
                                       ),
                                       Text(
@@ -604,45 +569,36 @@ class _TransferPageState extends State<TransferPage> {
                                   available > BigInt.zero,
                               child: Column(children: [
                                 Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 6),
+                                    padding: EdgeInsets.symmetric(vertical: 6),
                                     child: Divider(height: 1)),
                                 Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 16.w),
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 16.w),
                                   child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       Expanded(
                                         child: Container(
-                                            padding: EdgeInsets.only(
-                                                right: 60),
+                                            padding: EdgeInsets.only(right: 60),
                                             child: Column(
-                                              mainAxisSize:
-                                              MainAxisSize.min,
+                                              mainAxisSize: MainAxisSize.min,
                                               crossAxisAlignment:
-                                              CrossAxisAlignment
-                                                  .start,
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Text(
                                                   dic['transfer.alive']!,
-                                                  style: labelStyle
-                                                      ?.copyWith(
+                                                  style: labelStyle?.copyWith(
                                                       fontWeight:
-                                                      FontWeight
-                                                          .w400),
+                                                          FontWeight.w400),
                                                 ),
                                                 Padding(
                                                     padding:
-                                                    EdgeInsets.only(
-                                                        top: 2),
+                                                        EdgeInsets.only(top: 2),
                                                     child: Text(
                                                       dic['transfer.alive.msg']!,
                                                       style: subTitleStyle
                                                           ?.copyWith(
-                                                          height:
-                                                          1.3),
+                                                              height: 1.3),
                                                     )),
                                               ],
                                             )),
@@ -651,12 +607,10 @@ class _TransferPageState extends State<TransferPage> {
                                         value: _keepAlive,
                                         // account is not allow_death if it has
                                         // locked/reserved balances
-                                        onChanged: (v) =>
-                                            _onSwitchCheckAlive(
-                                                v,
-                                                !isAccountNormal ||
-                                                    notTransferable >
-                                                        BigInt.zero),
+                                        onChanged: (v) => _onSwitchCheckAlive(
+                                            v,
+                                            !isAccountNormal ||
+                                                notTransferable > BigInt.zero),
                                       )
                                     ],
                                   ),
@@ -668,8 +622,7 @@ class _TransferPageState extends State<TransferPage> {
                     Container(
                       padding: EdgeInsets.only(top: 16),
                       child: TxButton(
-                        text:
-                        widget.plugin.sdk.api.connectedNode == null
+                        text: widget.plugin.sdk.api.connectedNode == null
                             ? dic['xcm.connecting']
                             : dic['make'],
                         getTxParams: _getTxParams,

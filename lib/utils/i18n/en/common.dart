@@ -29,6 +29,9 @@ const Map<String, String> enCommon = {
   'address.from': 'From',
   'address': 'To Address',
   'address.error.eth': 'Invalid Ethereum address',
+  'network': 'To Network',
+  'network.warn':
+      'Please check the receiving network carefully if you need to transfer Token to an exchange.',
   'amount': 'Amount',
   'amount.hint': 'Please enter the transfer amount',
   'amount.max': 'Max',

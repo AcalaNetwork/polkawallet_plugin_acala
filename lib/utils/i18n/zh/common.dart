@@ -26,6 +26,8 @@ const Map<String, String> zhCommon = {
   'address.from': '付款地址',
   'address': '收款地址',
   'address.error.eth': '不是合法的以太坊地址',
+  'network': '收款网络',
+  'network.warn': '如需转账至交易所，请仔细核对收款网络。',
   'amount': '数量',
   'amount.hint': '请输入您想转账的数额',
   'amount.max': '最大值',
