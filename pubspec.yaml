@@ -1,6 +1,6 @@
 name: polkawallet_plugin_acala
 description: Acala network plugin for Polkawallet.
-version: 0.5.1
+version: 0.5.2
 homepage:
 
 environment:
@@ -20,8 +20,8 @@ dependencies:
   get_storage: ^2.0.2
   device_info: ^2.0.1
   graphql_flutter: ^5.0.0-nullsafety.5
-  polkawallet_sdk: ^0.5.1
-  polkawallet_ui: ^0.5.1
+  polkawallet_sdk: ^0.5.2
+  polkawallet_ui: ^0.5.2
   flutter_screenutil: ^5.0.0+2
   skeleton_loader: ^2.0.0+4
   rive: ^0.9.0
@@ -42,10 +42,10 @@ dev_dependencies:
     sdk: flutter
 
 dependency_overrides:
- polkawallet_sdk:
-   path: ../sdk
- polkawallet_ui:
-   path: ../ui
+# polkawallet_sdk:
+#   path: ../sdk
+# polkawallet_ui:
+#   path: ../ui
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

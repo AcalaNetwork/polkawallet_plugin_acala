@@ -923,17 +923,19 @@ packages:
   polkawallet_sdk:
     dependency: "direct main"
     description:
-      path: "../sdk"
-      relative: true
-    source: path
-    version: "0.5.1"
+      name: polkawallet_sdk
+      sha256: d003028e952256b59643c2fa3cd6e4b10c353a328280038e3adb58b1fe713218
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.2"
   polkawallet_ui:
     dependency: "direct main"
     description:
-      path: "../ui"
-      relative: true
-    source: path
-    version: "0.5.1"
+      name: polkawallet_ui
+      sha256: f14b36a19e5b4912978206c0066439377f28a6d7a00d8f37d52cca0f5aa7cd3d
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.5.2"
   pool:
     dependency: transitive
     description:
