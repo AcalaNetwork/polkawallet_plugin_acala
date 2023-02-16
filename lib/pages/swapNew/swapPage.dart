@@ -121,20 +121,16 @@ class _SwapPageState extends State<SwapPage> {
 class SwapSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final highlightColor = Colors.white54;
+    final baseColor = const Color(0xFF3A3B3D);
     return SkeletonLoader(
       builder: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Container(
-            width: 50,
-            height: 14,
-            color: Colors.white,
-            margin: EdgeInsets.only(right: 16),
-          ),
-          Container(
-            margin: EdgeInsets.only(left: 16, right: 16, top: 8),
+            margin: EdgeInsets.only(left: 16, right: 16, top: 16),
             decoration: BoxDecoration(
-                color: Color(0x24FFFFFF),
+                color: Colors.white54,
                 borderRadius: BorderRadius.all(Radius.circular(4))),
             child: SkeletonLoader(
               builder: Container(
@@ -144,12 +140,28 @@ class SwapSkeleton extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Container(width: 140, height: 14, color: Colors.white),
+                        Container(
+                            margin: EdgeInsets.only(bottom: 16),
+                            width: 120,
+                            height: 14,
+                            color: Colors.white),
                         Expanded(
                           child: SizedBox(height: 14),
                         ),
-                        Container(width: 80, height: 34, color: Colors.white),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Container(
+                                width: 100, height: 14, color: Colors.white),
+                            Container(
+                                margin: EdgeInsets.only(top: 24, bottom: 4),
+                                width: 60,
+                                height: 14,
+                                color: Colors.white)
+                          ],
+                        ),
                       ],
                     ),
                   ],
@@ -157,15 +169,15 @@ class SwapSkeleton extends StatelessWidget {
               ),
               items: 1,
               period: Duration(seconds: 2),
-              highlightColor: Color(0xFFC0C0C0),
-              baseColor: Color(0xFFE0E0E0),
+              highlightColor: highlightColor,
+              baseColor: baseColor,
               direction: SkeletonDirection.ltr,
             ),
           ),
           Container(
-            margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+            margin: EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 24),
             decoration: BoxDecoration(
-                color: Color(0x24FFFFFF),
+                color: Colors.white54,
                 borderRadius: BorderRadius.all(Radius.circular(4))),
             child: SkeletonLoader(
               builder: Container(
@@ -175,12 +187,28 @@ class SwapSkeleton extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Container(width: 140, height: 14, color: Colors.white),
+                        Container(
+                            margin: EdgeInsets.only(bottom: 16),
+                            width: 120,
+                            height: 14,
+                            color: Colors.white),
                         Expanded(
                           child: SizedBox(height: 14),
                         ),
-                        Container(width: 80, height: 34, color: Colors.white),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Container(
+                                width: 100, height: 14, color: Colors.white),
+                            Container(
+                                margin: EdgeInsets.only(top: 24, bottom: 4),
+                                width: 60,
+                                height: 14,
+                                color: Colors.white)
+                          ],
+                        ),
                       ],
                     ),
                   ],
@@ -188,22 +216,32 @@ class SwapSkeleton extends StatelessWidget {
               ),
               items: 1,
               period: Duration(seconds: 2),
-              highlightColor: Color(0xFFC0C0C0),
-              baseColor: Color(0xFFE0E0E0),
+              highlightColor: highlightColor,
+              baseColor: baseColor,
               direction: SkeletonDirection.ltr,
             ),
           ),
-          Container(
-              width: 90,
-              height: 14,
-              color: Colors.white,
-              margin: EdgeInsets.only(right: 16)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                  width: 120,
+                  height: 14,
+                  color: Colors.white,
+                  margin: EdgeInsets.only(left: 16)),
+              Container(
+                  width: 80,
+                  height: 14,
+                  color: Colors.white,
+                  margin: EdgeInsets.only(right: 16))
+            ],
+          ),
         ],
       ),
       items: 1,
       period: Duration(seconds: 2),
-      highlightColor: Color(0xFFC0C0C0),
-      baseColor: Color(0xFFE0E0E0),
+      highlightColor: highlightColor,
+      baseColor: baseColor,
       direction: SkeletonDirection.ltr,
     );
   }
