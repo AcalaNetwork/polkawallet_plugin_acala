@@ -15,6 +15,7 @@ import 'package:polkawallet_sdk/plugin/store/balances.dart';
 import 'package:polkawallet_sdk/storage/keyring.dart';
 import 'package:polkawallet_sdk/utils/i18n.dart';
 import 'package:polkawallet_ui/components/listTail.dart';
+import 'package:polkawallet_ui/components/v3/numberLoader.dart';
 import 'package:polkawallet_ui/components/v3/plugin/pluginInfoItem.dart';
 import 'package:polkawallet_ui/components/v3/plugin/pluginOutlinedButtonSmall.dart';
 import 'package:polkawallet_ui/components/v3/plugin/pluginTokenIcon.dart';
@@ -421,23 +422,66 @@ class _DexPoolCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                PluginInfoItem(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  title: PluginFmt.tokenView(balancePair[0].symbol),
-                  content:
-                      amountLeft == null ? '--' : Fmt.priceFloor(amountLeft),
-                ),
-                PluginInfoItem(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  title: PluginFmt.tokenView(balancePair[1].symbol),
-                  content:
-                      amountRight == null ? '--' : Fmt.priceFloor(amountRight),
-                ),
-                PluginInfoItem(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  title: dic['boot.ratio'],
-                  content: '1 : ${ratio.toStringAsFixed(4)}',
-                ),
+                Expanded(
+                    child: Column(
+                  children: [
+                    Text(
+                      PluginFmt.tokenView(balancePair[0].symbol),
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Colors.white, fontWeight: FontWeight.w600),
+                    ),
+                    NumberLoader(
+                        margin: EdgeInsets.only(top: 8),
+                        child: Text(
+                          Fmt.priceFloor(amountLeft),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium
+                              ?.copyWith(color: Colors.white),
+                        ),
+                        isLoading: amountLeft == null),
+                  ],
+                )),
+                Expanded(
+                    child: Column(
+                  children: [
+                    Text(
+                      PluginFmt.tokenView(balancePair[1].symbol),
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Colors.white, fontWeight: FontWeight.w600),
+                    ),
+                    NumberLoader(
+                        margin: EdgeInsets.only(top: 8),
+                        child: Text(
+                          Fmt.priceFloor(amountRight),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium
+                              ?.copyWith(color: Colors.white),
+                        ),
+                        isLoading: amountRight == null),
+                  ],
+                )),
+                Expanded(
+                    child: Column(
+                  children: [
+                    Text(
+                      dic['boot.ratio']!,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Colors.white, fontWeight: FontWeight.w600),
+                    ),
+                    NumberLoader(
+                        margin: EdgeInsets.only(top: 8),
+                        child: Text(
+                          '1 : ${ratio.toStringAsFixed(4)}',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium
+                              ?.copyWith(color: Colors.white),
+                        ),
+                        isLoading: ratio == 0),
+                  ],
+                )),
               ],
             ),
           ),
