@@ -115,7 +115,7 @@ class _MultiplyPageState extends State<MultiplyPage> {
               PluginAccountInfoAction(widget.keyring)
             ],
           ),
-          body: isDataLoading
+          body: widget.plugin.sdk.api.connectedNode == null || isDataLoading
               ? PluginPopLoadingContainer(
                   loading: true,
                   child:
