@@ -100,12 +100,14 @@ class _LoanPageState extends State<LoanPage> {
         }
       });
 
-      setState(() {
-        _totalMinted = _debit +
-            Fmt.bigIntToDouble(
-                BigInt.parse(data), balancePair[0].decimals ?? 12);
-        _isQueryCollateraling = false;
-      });
+      if (mounted) {
+        setState(() {
+          _totalMinted = _debit +
+              Fmt.bigIntToDouble(
+                  BigInt.parse(data), balancePair[0].decimals ?? 12);
+          _isQueryCollateraling = false;
+        });
+      }
     });
   }
 
