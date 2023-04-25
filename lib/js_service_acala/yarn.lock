@@ -63,7 +63,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@acala-network/bodhi@npm:^2.4.0, @acala-network/bodhi@npm:^2.6.5":
+"@acala-network/bodhi@npm:^2.6.5":
   version: 2.6.5
   resolution: "@acala-network/bodhi@npm:2.6.5"
   dependencies:
@@ -95,7 +95,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@acala-network/eth-providers@npm:2.6.5, @acala-network/eth-providers@npm:^2.5.9, @acala-network/eth-providers@npm:^2.6.5":
+"@acala-network/eth-providers@npm:^2.6.5":
   version: 2.6.5
   resolution: "@acala-network/eth-providers@npm:2.6.5"
   dependencies:

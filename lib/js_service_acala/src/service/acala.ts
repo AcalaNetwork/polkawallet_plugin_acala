@@ -65,7 +65,8 @@ async function _initDexSDK(api: ApiRx) {
   swapper = new AggregateDex({
     api,
     wallet,
-    providers: [new AcalaDex({ api, wallet }), new NutsDex({ api, wallet })],
+    // providers: [new AcalaDex({ api, wallet }), new NutsDex({ api, wallet })],
+    providers: [new AcalaDex({ api, wallet })],
   });
 
   await swapper.isReady;

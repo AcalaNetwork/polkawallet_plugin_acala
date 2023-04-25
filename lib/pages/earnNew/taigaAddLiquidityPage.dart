@@ -17,8 +17,8 @@ import 'package:polkawallet_ui/components/v3/plugin/pluginAccountInfoAction.dart
 import 'package:polkawallet_ui/components/v3/plugin/pluginButton.dart';
 import 'package:polkawallet_ui/components/v3/plugin/pluginInputBalance.dart';
 import 'package:polkawallet_ui/components/v3/plugin/pluginScaffold.dart';
-import 'package:polkawallet_ui/pages/dAppWrapperPage.dart';
 import 'package:polkawallet_ui/pages/v3/txConfirmPage.dart';
+import 'package:polkawallet_ui/utils/consts.dart';
 import 'package:polkawallet_ui/utils/format.dart';
 
 class TaigaAddLiquidityPage extends StatefulWidget {
@@ -412,57 +412,62 @@ class _TaigaAddLiquidityPageState extends State<TaigaAddLiquidityPage> {
                               ],
                             ),
                           ),
-                          GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).pushNamed(
-                                    DAppWrapperPage.route,
-                                    arguments: {
-                                      'url': "https://app.tapioprotocol.io/"
-                                    });
-                              },
-                              child: Container(
-                                  margin: EdgeInsets.only(top: 62),
-                                  child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      Image.asset(
-                                          "packages/polkawallet_plugin_karura/assets/images/taiga_addliquidity.png",
-                                          width: double.infinity),
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 32),
-                                        child: Column(
-                                          children: [
-                                            Text(
-                                              "Add Liquidity to get reward of ${Fmt.ratio(apy)} APR!",
-                                              textAlign: TextAlign.center,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline2
-                                                  ?.copyWith(
-                                                      color: Colors.white),
-                                            ),
-                                            Text(
-                                              "For reward detail description, tap here",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .headline5
-                                                  ?.copyWith(
-                                                      color: Color(0xFFD5BDFF)),
-                                            )
-                                          ],
-                                        ),
-                                      )
-                                    ],
-                                  )))
+                          // TODO: temp disabled
+                          // GestureDetector(
+                          //     onTap: () {
+                          //       Navigator.of(context).pushNamed(
+                          //           DAppWrapperPage.route,
+                          //           arguments: {
+                          //             'url': "https://app.tapioprotocol.io/"
+                          //           });
+                          //     },
+                          //     child: Container(
+                          //         margin: EdgeInsets.only(top: 62),
+                          //         child: Stack(
+                          //           alignment: Alignment.center,
+                          //           children: [
+                          //             Image.asset(
+                          //                 "packages/polkawallet_plugin_karura/assets/images/taiga_addliquidity.png",
+                          //                 width: double.infinity),
+                          //             Padding(
+                          //               padding: EdgeInsets.symmetric(
+                          //                   horizontal: 32),
+                          //               child: Column(
+                          //                 children: [
+                          //                   Text(
+                          //                     "Add Liquidity to get reward of ${Fmt.ratio(apy)} APR!",
+                          //                     textAlign: TextAlign.center,
+                          //                     style: Theme.of(context)
+                          //                         .textTheme
+                          //                         .headline2
+                          //                         ?.copyWith(
+                          //                             color: Colors.white),
+                          //                   ),
+                          //                   Text(
+                          //                     "For reward detail description, tap here",
+                          //                     style: Theme.of(context)
+                          //                         .textTheme
+                          //                         .headline5
+                          //                         ?.copyWith(
+                          //                             color: Color(0xFFD5BDFF)),
+                          //                   )
+                          //                 ],
+                          //               ),
+                          //             )
+                          //           ],
+                          //         )))
                         ],
                       ),
                 Padding(
                     padding: EdgeInsets.only(top: 60, bottom: 38),
                     child: PluginButton(
                       title: dic['earn.add']!,
-                      onPressed: () => _onSubmit(
-                          tokenPair[0].decimals, tokenPair[1].decimals),
+                      // TODO: temp disabled
+                      onPressed: () => null,
+                      backgroundColor: PluginColorsDark.disableBg,
+                      style: TextStyle(color: Colors.white30),
+                      // onPressed: () => _onSubmit(
+                      //     tokenPair[0].decimals, tokenPair[1].decimals),
                     )),
               ],
             )),
