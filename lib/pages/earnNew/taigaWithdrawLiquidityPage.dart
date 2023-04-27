@@ -703,12 +703,8 @@ class _TaigaWithdrawLiquidityPageState
                                       EdgeInsets.only(top: 150, bottom: 38),
                                   child: PluginButton(
                                     title: dic['earn.remove']!,
-                                    // TODO: temp disabled
-                                    onPressed: () => null,
-                                    backgroundColor: PluginColorsDark.disableBg,
-                                    style: TextStyle(color: Colors.white30),
-                                    // onPressed: () =>
-                                    //     _onSubmit(balance.decimals),
+                                    onPressed: () =>
+                                        _onSubmit(balance.decimals),
                                   )),
                             ],
                           ),
