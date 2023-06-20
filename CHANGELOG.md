@@ -1,3 +1,8 @@
+## [0.5.3] - 20230620
+- bump polkawallet_sdk v0.5.4+2.
+- bump acala.js v5.1.1.
+- update loanTypes filter.
+
 ## [0.5.2] - 20230214
 - bump polkawallet_sdk v0.5.2.
 - rebuild cross-chain staking page data render.

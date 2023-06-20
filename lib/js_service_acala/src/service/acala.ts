@@ -177,7 +177,9 @@ async function getAllTokens() {
  */
 async function getTokenPrices(tokens: string[], type: 0 | 1 | 2 | 3) {
   const prices = await Promise.all(
-    tokens.map((e) => ((<any>window).wallet as Wallet).getPrice(e === "LCDOT" ? "lcDOT" : e, type).catch((_) => FixedPointNumber.ZERO))
+    tokens
+      .filter((e) => !!e)
+      .map((e) => ((<any>window).wallet as Wallet).getPrice(e === "LCDOT" ? "lcDOT" : e, type).catch((_) => FixedPointNumber.ZERO))
   );
   return prices.reduce((res, e, i) => ({ ...res, [tokens[i]]: e.toChainData() }), {});
 }
