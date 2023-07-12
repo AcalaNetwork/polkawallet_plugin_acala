@@ -869,8 +869,27 @@ async function queryHomaNewEnv(api: ApiPromise) {
     homa = new Homa(api, (<any>window).wallet);
   }
 
-  const [homaEnv, apy] = await Promise.all([homa.getEnv(), axios.get("https://api.polkawallet.io/height-time-avg/apr?network=acala")]);
-  return _formatHomaEnv(homaEnv, (apy.data as number) || 0);
+  const endpoint = "https://api.polkawallet.io/acala-liquid-staking-subql";
+  const apyRequestBody = {
+    query: `
+    {
+      dailySummaries(first: 30, orderBy:TIMESTAMP_DESC) {
+        nodes {
+          exchangeRate
+          timestamp
+        }
+      }
+    }
+  `,
+  };
+  const [homaEnv, apyRes] = await Promise.all([homa.getEnv(), axios.post(endpoint, apyRequestBody)]);
+  const list = (apyRes.data as any).data.dailySummaries.nodes;
+  const first = list[0];
+  const last = list[list.length - 1];
+  const len = list.length;
+
+  const apy = Math.pow(first.exchangeRate / last.exchangeRate, 365 / len) - 1;
+  return _formatHomaEnv(homaEnv, apy || 0);
 }
 
 async function calcHomaNewMintAmount(api: ApiPromise, amount: number) {
