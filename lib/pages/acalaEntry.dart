@@ -3,7 +3,6 @@ import 'package:polkawallet_plugin_acala/common/constants/index.dart';
 import 'package:polkawallet_plugin_acala/pages/earnNew/earnPage.dart';
 import 'package:polkawallet_plugin_acala/pages/homaNew/homaPage.dart';
 import 'package:polkawallet_plugin_acala/pages/loanNew/loanPage.dart';
-import 'package:polkawallet_plugin_acala/pages/multiply/multiplyPage.dart';
 import 'package:polkawallet_plugin_acala/pages/swapNew/swapPage.dart';
 import 'package:polkawallet_plugin_acala/polkawallet_plugin_acala.dart';
 import 'package:polkawallet_plugin_acala/utils/i18n/index.dart';
@@ -87,7 +86,7 @@ class DefiWidget extends StatelessWidget {
   final PluginAcala plugin;
 
   final _liveModuleRoutes = {
-    'multiply': MultiplyPage.route,
+    // 'multiply': MultiplyPage.route,
     'loan': LoanPage.route,
     'swap': SwapPage.route,
     'earn': EarnPage.route,

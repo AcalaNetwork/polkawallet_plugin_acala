@@ -4,7 +4,9 @@ const plugin_genesis_hash =
     '0xfc41b9bd8ef8fe53d58c7ea67c794c7ec9a73daf05e6d54b14ff6342c99ba64c';
 const acala_price_decimals = 18;
 const acala_stable_coin = 'AUSD';
-const acala_stable_coin_view = 'aUSD';
+const acala_stable_coin_view = 'aSEED';
+const acala_seed_coin = 'ASEED';
+const acala_stable_coin_view_old = 'aUSD';
 const acala_token_lc_dot = 'LCDOT';
 const acala_token_lc_dot_view = 'lcDOT';
 const acala_token_usdc = 'USDCET';

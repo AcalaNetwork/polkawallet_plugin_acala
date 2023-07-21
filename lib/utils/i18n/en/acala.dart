@@ -42,7 +42,7 @@ const Map<String, String> enDex = {
   'boot.my.est': 'Est.',
   'boot.my.share': 'Share',
   'boot.add': 'Add',
-  'loan.title': 'Mint aUSD',
+  'loan.title': 'aUSD SEED (aSEED)',
   'loan.borrowed': 'Owed',
   'loan.collateral': 'Collateral',
   'loan.ratio': 'Collateral Ratio',

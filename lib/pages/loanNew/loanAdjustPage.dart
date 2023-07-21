@@ -782,7 +782,6 @@ class _LoanAdjustPageState extends State<LoanAdjustPage> {
   Future<void> _onSubmit() async {
     final params = await _getTxParams(_editorLoan!, _loan!);
     if (params == null) return null;
-
     final res = (await Navigator.of(context).pushNamed(TxConfirmPage.route,
         arguments: TxConfirmParams(
           module: 'honzon',
@@ -870,7 +869,9 @@ class _LoanAdjustPageState extends State<LoanAdjustPage> {
     if (debitShares != BigInt.zero) {
       var dicValue = 'loan.mint';
 
-      if (loan.type.maximumTotalDebitValue == BigInt.zero) return null;
+      /// disable loan.mint for aSEED upgrade
+      if (debitShares > BigInt.zero &&
+          loan.type.maximumTotalDebitValue == BigInt.zero) return null;
 
       if (originalLoan.debits == BigInt.zero &&
           debits < loan.type.minimumDebitValue) {

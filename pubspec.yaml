@@ -1,6 +1,6 @@
 name: polkawallet_plugin_acala
 description: Acala network plugin for Polkawallet.
-version: 0.5.3
+version: 0.5.4
 homepage:
 
 environment:

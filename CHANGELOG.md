@@ -1,3 +1,7 @@
+## [0.5.4]
+20230721
+- aUSD -> aSEED update.
+
 ## [0.5.3] - 20230620
 - bump polkawallet_sdk v0.5.4+2.
 - bump acala.js v5.1.1.

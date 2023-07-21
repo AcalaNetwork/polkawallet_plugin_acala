@@ -53,9 +53,8 @@ const Map<String, String> enCommon = {
   'node.connecting': 'Connecting remote node...',
   'node.failed': 'Remote node connection failed',
   'unlock': 'Unlock Account with Password',
-  'loan.title': 'Mint aUSD',
-  'loan.brief':
-      'Leverage your digital assets by depositing them as collateral to mint aUSD.',
+  'loan.title': 'aUSD SEED (aSEED)',
+  'loan.brief': 'aUSD SEED',
   'swap.title': 'Swap',
   'swap.brief':
       'Swap tokens or provide liquidity in Acala Decentralized Exchange.',

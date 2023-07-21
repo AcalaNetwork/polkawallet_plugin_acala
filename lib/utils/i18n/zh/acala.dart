@@ -41,7 +41,7 @@ const Map<String, String> zhDex = {
   'boot.my.est': '预估',
   'boot.my.share': '份额',
   'boot.add': '添加',
-  'loan.title': '生成 aUSD',
+  'loan.title': 'aUSD SEED (aSEED)',
   'loan.borrowed': '当前债务',
   'loan.collateral': '质押',
   'loan.ratio': '质押率',
