@@ -20,8 +20,8 @@ dependencies:
   get_storage: ^2.0.2
   device_info: ^2.0.1
   graphql_flutter: ^5.0.0-nullsafety.5
-  polkawallet_sdk: ^0.5.4+2
-  polkawallet_ui: ^0.5.4+1
+  polkawallet_sdk: ^0.5.4+6
+  polkawallet_ui: ^0.5.4+2
   flutter_screenutil: ^5.0.0+2
   skeleton_loader: ^2.0.0+4
   rive: ^0.9.0
