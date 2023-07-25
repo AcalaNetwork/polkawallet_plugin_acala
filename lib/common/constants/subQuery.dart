@@ -38,20 +38,53 @@ const loanQuery = r'''
         }
 }
 ''';
-const swapQuery = r'''
-  query ($account: String) {
-    dexActions(filter: {accountId: {equalTo: $account}},
-      orderBy: TIMESTAMP_DESC, first: 20) {
+const swapQueryParam = r'$account: String';
+const swapQueryFilter = r'''filter: { addressId: { equalTo: $account } }
+      first: 20
+      orderBy: TIMESTAMP_DESC''';
+const swapQuerySchema = '''id
+        token0Id
+        token1Id
+        blockId
+        extrinsicId
+        timestamp''';
+const swapQuery = '''
+  query ($swapQueryParam) {
+    swaps(
+      $swapQueryFilter
+    ) {
       nodes {
-        id
-        type
-        data
-        timestamp
-        extrinsic {
-          id
-          method
-          isSuccess
-        }
+        $swapQuerySchema
+        token0InAmount
+        token1OutAmount
+      }
+    }
+    addLiquidities(
+      $swapQueryFilter
+    ) {
+      nodes {
+        $swapQuerySchema
+        token0Amount
+        token1Amount
+      }
+    }
+    addProvisions(
+      $swapQueryFilter
+    ) {
+      nodes {
+        $swapQuerySchema
+        token0Amount
+        token1Amount
+      }
+    }
+    removeLiquidities(
+      $swapQueryFilter
+    ) {
+      nodes {
+        $swapQuerySchema
+        token0Amount
+        token1Amount
+        shareAmount
       }
     }
   }

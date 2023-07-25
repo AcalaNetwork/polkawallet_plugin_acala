@@ -43,21 +43,21 @@ class SwapDetailPage extends StatelessWidget {
     String event = tx.action ?? "";
     switch (tx.action) {
       //taiga
-      case "mint":
-        action = "addLiquidity";
+      case "Mint":
+        action = "AddLiquidity";
         event = "Mint";
         break;
-      case "proportionredeem":
+      case "ProportionRedeem":
         event = "ProportionRedeem";
-        action = "removeLiquidity";
+        action = "RemoveLiquidity";
         break;
-      case "singleredeem":
+      case "SingleRedeem":
         event = "SingleRedeem";
-        action = "removeLiquidity";
+        action = "RemoveLiquidity";
         break;
-      case "multiredeem":
+      case "MultiRedeem":
         event = "MultiRedeem";
-        action = "removeLiquidity";
+        action = "RemoveLiquidity";
         break;
     }
     final List<TxDetailInfoItem> items = [
@@ -78,7 +78,7 @@ class SwapDetailPage extends StatelessWidget {
       )
     ];
     switch (tx.action) {
-      case "swap":
+      case "Swap":
         items.addAll([
           TxDetailInfoItem(
             label: dic['dex.pay'],
@@ -90,7 +90,7 @@ class SwapDetailPage extends StatelessWidget {
           )
         ]);
         break;
-      case "addProvision":
+      case "AddProvision":
         items.add(TxDetailInfoItem(
             label: dic['dex.pay'],
             content: Text(
@@ -100,7 +100,7 @@ class SwapDetailPage extends StatelessWidget {
               textAlign: TextAlign.right,
             )));
         break;
-      case "addLiquidity":
+      case "AddLiquidity":
         items.addAll([
           TxDetailInfoItem(
             label: dic['dex.pay'],
@@ -116,7 +116,7 @@ class SwapDetailPage extends StatelessWidget {
           )
         ]);
         break;
-      case "removeLiquidity":
+      case "RemoveLiquidity":
         items.addAll([
           TxDetailInfoItem(
             label: dic['dex.pay'],
@@ -133,7 +133,7 @@ class SwapDetailPage extends StatelessWidget {
         ]);
         break;
       //taiga
-      case "mint":
+      case "Mint":
         items.addAll([
           TxDetailInfoItem(
             label: dic['dex.pay'],
@@ -142,9 +142,9 @@ class SwapDetailPage extends StatelessWidget {
           ),
         ]);
         break;
-      case "proportionredeem":
-      case "singleredeem":
-      case "multiredeem":
+      case "ProportionRedeem":
+      case "SingleRedeem":
+      case "MultiRedeem":
         items.addAll([
           TxDetailInfoItem(
             label: dic['dex.pay'],

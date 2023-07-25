@@ -14,112 +14,96 @@ class TxSwapData extends _TxSwapData {
 
   static TxSwapData fromJson(Map json, PluginAcala plugin) {
     final data = TxSwapData();
-    data.action = json['type'];
-    data.hash = json['extrinsic']['id'];
+    data.action = json['__typename'].toString();
+    data.hash = json['extrinsicId'];
 
     switch (data.action) {
-      case "swap":
-        final List path = jsonDecode(json['data'][1]['value']);
-        final tokenPay = AssetsUtils.tokenDataFromCurrencyId(plugin, path[0]);
-        final tokenReceive =
-            AssetsUtils.tokenDataFromCurrencyId(plugin, path[path.length - 1]);
-        data.tokenPay = tokenPay.symbol;
-        data.tokenReceive = tokenReceive.symbol;
-        if (json['data'][2]['type'] == 'Balance') {
-          data.amountPay = Fmt.priceFloorBigInt(
-              Fmt.balanceInt(json['data'][2]['value'].toString()),
-              tokenPay.decimals!,
-              lengthMax: 6);
-          data.amountReceive = Fmt.priceFloorBigInt(
-              Fmt.balanceInt(json['data'][3]['value'].toString()),
-              tokenReceive.decimals!,
-              lengthMax: 6);
-        } else {
-          data.amountPay = Fmt.priceFloorBigInt(
-              Fmt.balanceInt(
-                  jsonDecode(json['data'][2]['value'])[0].toString()),
-              tokenPay.decimals!,
-              lengthMax: 6);
-          data.amountReceive = Fmt.priceFloorBigInt(
-              Fmt.balanceInt(
-                  jsonDecode(json['data'][2]['value'])[path.length - 1]
-                      .toString()),
-              tokenReceive.decimals!,
-              lengthMax: 6);
-        }
-        break;
-      case "addProvision":
-      case "addLiquidity":
-      case "removeLiquidity":
-        final tokenPay = AssetsUtils.tokenDataFromCurrencyId(
-            plugin, jsonDecode(json['data'][1]['value']));
-        final tokenReceive = AssetsUtils.tokenDataFromCurrencyId(
-            plugin, jsonDecode(json['data'][3]['value']));
-        data.tokenPay = tokenPay.symbol;
-        data.tokenReceive = tokenReceive.symbol;
+      case "Swap":
+        final tokenPair = AssetsUtils.getBalancePairFromTokenNameId(
+            plugin, [json['token0Id'], json['token1Id']]);
+        data.tokenPay = tokenPair[0].symbol;
+        data.tokenReceive = tokenPair[1].symbol;
         data.amountPay = Fmt.priceFloorBigInt(
-            Fmt.balanceInt(json['data'][2]['value'].toString()),
-            tokenPay.decimals!,
+            Fmt.balanceInt(json['token0InAmount'].toString()),
+            tokenPair[0].decimals ?? 12,
             lengthMax: 6);
         data.amountReceive = Fmt.priceFloorBigInt(
-            Fmt.balanceInt(json['data'][4]['value'].toString()),
-            tokenReceive.decimals!,
+            Fmt.balanceInt(json['token1OutAmount'].toString()),
+            tokenPair[1].decimals ?? 12,
             lengthMax: 6);
-        data.amountShare = (json['data'] as List).length > 5
+        break;
+      case "AddProvision":
+      case "AddLiquidity":
+      case "RemoveLiquidity":
+        final tokenPair = AssetsUtils.getBalancePairFromTokenNameId(
+            plugin, [json['token0Id'], json['token1Id']]);
+        data.tokenPay = tokenPair[0].symbol;
+        data.tokenReceive = tokenPair[1].symbol;
+        data.amountPay = Fmt.priceFloorBigInt(
+            Fmt.balanceInt(json['token0Amount'].toString()),
+            tokenPair[0].decimals ?? 12,
+            lengthMax: 6);
+        data.amountReceive = Fmt.priceFloorBigInt(
+            Fmt.balanceInt(json['token1Amount'].toString()),
+            tokenPair[1].decimals ?? 12,
+            lengthMax: 6);
+        data.amountShare = json['shareAmount'] != null
             ? Fmt.priceFloorBigInt(
-                Fmt.balanceInt(json['data'][5]['value'].toString()),
-                tokenPay.decimals!,
+                Fmt.balanceInt(json['shareAmount'].toString()),
+                tokenPair[0].decimals ?? 12,
                 lengthMax: 6)
             : '';
         break;
     }
 
     data.time = (json['timestamp'] as String).replaceAll(' ', '');
-    data.isSuccess = json['extrinsic']['isSuccess'];
+    data.isSuccess = true;
     return data;
   }
 
   static TxSwapData fromTaigaJson(Map json, PluginAcala plugin) {
     final data = TxSwapData();
-    data.action = json['__typename'].toString().toLowerCase();
+    data.action = json['__typename'].toString();
     data.hash = json['extrinsicId'];
     data.isTaiga = true;
 
     switch (data.action) {
-      case "swap":
+      case "Swap":
         final tokenPay = AssetsUtils.tokenDataFromCurrencyId(
-            plugin, jsonDecode(json['outputAsset']));
-        final tokenReceive = AssetsUtils.tokenDataFromCurrencyId(
             plugin, jsonDecode(json['inputAsset']));
+        final tokenReceive = AssetsUtils.tokenDataFromCurrencyId(
+            plugin, jsonDecode(json['outputAsset']));
         data.tokenPay = tokenPay.symbol;
         data.tokenReceive = tokenReceive.symbol;
+
         if (tokenPay.symbol == 'LDOT') {
           data.amountPay = Fmt.priceFloor(
-              Fmt.bigIntToDouble(Fmt.balanceInt(json['outputAmount']),
-                      tokenPay.decimals ?? 12) /
-                  Fmt.bigIntToDouble(
-                      Fmt.balanceInt(json['block']['liquidExchangeRate']), 18),
-              lengthMax: 6);
-        } else {
-          data.amountPay = Fmt.priceFloorBigInt(
-              Fmt.balanceInt(json['outputAmount']), tokenPay.decimals ?? 12,
-              lengthMax: 6);
-        }
-
-        if (tokenReceive.symbol == 'LDOT') {
-          data.amountReceive = Fmt.priceFloor(
               Fmt.bigIntToDouble(Fmt.balanceInt(json['inputAmount']),
                       tokenPay.decimals ?? 12) /
                   Fmt.bigIntToDouble(
                       Fmt.balanceInt(json['block']['liquidExchangeRate']), 18),
               lengthMax: 6);
         } else {
-          data.amountReceive = Fmt.priceFloorBigInt(
-              Fmt.balanceInt(json['inputAmount']), tokenReceive.decimals ?? 12,
+          data.amountPay = Fmt.priceFloorBigInt(
+              Fmt.balanceInt(json['inputAmount']), tokenPay.decimals ?? 12,
               lengthMax: 6);
         }
+
+        if (tokenReceive.symbol == 'LDOT') {
+          data.amountReceive = Fmt.priceFloor(
+              Fmt.bigIntToDouble(Fmt.balanceInt(json['outputAmount']),
+                      tokenPay.decimals ?? 12) /
+                  Fmt.bigIntToDouble(
+                      Fmt.balanceInt(json['block']['liquidExchangeRate']), 18),
+              lengthMax: 6);
+        } else {
+          data.amountReceive = Fmt.priceFloorBigInt(
+              Fmt.balanceInt(json['outputAmount']), tokenReceive.decimals ?? 12,
+              lengthMax: 6);
+        }
+
         break;
-      case "mint":
+      case "Mint":
         final taigaData = plugin.store!.earn.taigaTokenPairs.firstWhere(
             (element) => element.tokenNameId == "sa://${json['poolId']}",
             orElse: () => DexPoolData());
@@ -152,9 +136,9 @@ class TxSwapData extends _TxSwapData {
             ..symbol = element.symbol);
         });
         break;
-      case "proportionredeem":
-      case "singleredeem":
-      case "multiredeem":
+      case "ProportionRedeem":
+      case "SingleRedeem":
+      case "MultiRedeem":
         final tokenPay = AssetsUtils.getBalanceFromTokenNameId(
             plugin, "sa://${json['poolId']}");
         data.tokenPay = tokenPay.symbol;
