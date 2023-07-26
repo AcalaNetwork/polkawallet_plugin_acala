@@ -592,10 +592,13 @@ class _LoanAdjustPageState extends State<LoanAdjustPage> {
     } else if (titleTag == dic['loan.mint']!) {
       symbol = acala_stable_coin;
       decimals = balancePair[1].decimals ?? 12;
-      amount = (_editorLoan!.maxToBorrow - _loan!.debits > BigInt.zero
-              ? _editorLoan!.maxToBorrow - _loan!.debits
-              : BigInt.zero)
-          .toString();
+
+      /// 0 mint for aseed upgrade
+      amount = '0';
+      // amount = (_editorLoan!.maxToBorrow - _loan!.debits > BigInt.zero
+      //         ? _editorLoan!.maxToBorrow - _loan!.debits
+      //         : BigInt.zero)
+      //     .toString();
     } else if (titleTag == dic['loan.deposit']!) {
       symbol = _editorLoan!.token!.symbol!;
       decimals = _editorLoan!.token?.decimals ?? 12;
