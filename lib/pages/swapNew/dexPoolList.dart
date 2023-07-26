@@ -207,7 +207,7 @@ class _TaigaDexPoolCard extends StatelessWidget {
                 children: [
                   Container(
                     child: PluginTokenIcon(
-                      balance.symbol!,
+                      balance.symbol!.toUpperCase(),
                       tokenIcons!,
                       size: 26,
                       bgColor: Color(0xFF9E98E7),
