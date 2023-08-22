@@ -1,3 +1,7 @@
+## [0.5.5]
+20230822
+- bump acala.js sdk v4.1.9-7.
+
 ## [0.5.4]
 20230721
 - aUSD -> aSEED update.
