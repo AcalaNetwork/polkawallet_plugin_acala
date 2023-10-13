@@ -87,10 +87,10 @@ class DefiWidget extends StatelessWidget {
 
   final _liveModuleRoutes = {
     // 'multiply': MultiplyPage.route,
-    'loan': LoanPage.route,
-    'swap': SwapPage.route,
     'earn': EarnPage.route,
+    'swap': SwapPage.route,
     'homa': HomaPage.route,
+    'loan': LoanPage.route,
   };
 
   @override

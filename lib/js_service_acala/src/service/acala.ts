@@ -3,7 +3,9 @@ import { ApiPromise, ApiRx } from "@polkadot/api";
 import { hexToString, BN_ZERO } from "@polkadot/util";
 import { nft_image_config } from "../constants/acala";
 import { BN } from "@polkadot/util/bn/bn";
-import { AcalaDex, AggregateDex, NutsDex } from "@acala-network/sdk-swap";
+import { AcalaDex, AggregateDex } from "@acala-network/sdk-swap";
+import { NutsDex } from "@acala-network/nuts-swap-adapter";
+import { StableAssetRx } from "@acala-network/sdk-stable-asset";
 import { Homa, Wallet, History } from "@acala-network/sdk";
 import { OraclePriceProvider } from "@acala-network/sdk/wallet/price-provider/oracle-price-provider";
 import axios from "axios";
@@ -11,7 +13,6 @@ import { IncentiveResult, TaigaUserReward } from "../types/acalaTypes";
 import { firstValueFrom, take, throttleTime } from "rxjs";
 import { HomaEnvironment } from "@acala-network/sdk/homa/types";
 import { BalanceData } from "@acala-network/sdk/wallet";
-import { StableAssetRx } from "@nuts-finance/sdk-stable-asset";
 import { BigNumber } from "bignumber.js";
 import { HistoryRecord } from "@acala-network/sdk/history/types";
 
@@ -22,7 +23,7 @@ const native_token = "ACA";
 const native_token_list = [native_token, "DOT", "LDOT", "AUSD", "lc://13"];
 const taigaPoolApy: Record<string, number> = {};
 
-let ACA_SYS_BLOCK_TIME = new BN(12000);
+let ACA_SYS_BLOCK_TIME = new BN(12500);
 
 let homa: Homa;
 let stableAssetApi: StableAssetRx;
@@ -62,10 +63,14 @@ async function _initDexSDK(api: ApiRx) {
   const wallet = (<any>window).wallet;
   await wallet.isReady;
 
+  if (!stableAssetApi) {
+    stableAssetApi = new StableAssetRx(api);
+  }
+
   swapper = new AggregateDex({
     api,
     wallet,
-    providers: [new AcalaDex({ api, wallet }), new NutsDex({ api, wallet })],
+    providers: [new AcalaDex({ api, wallet }), new NutsDex({ api, wallet, stableAssets: stableAssetApi })],
   });
 
   await swapper.isReady;
@@ -387,20 +392,21 @@ async function getBootstraps(api: ApiPromise) {
  * fetchCollateralRewards
  * @param {String} address
  */
-async function fetchCollateralRewards(api: ApiPromise, address: string) {
-  const pools = await api.query.rewards.poolInfos.entries();
-  const loanPools = pools.map(([key, _]) => key.toHuman()[0]).filter((token) => Object.keys(token)[0] === "Loans");
-  return Promise.all(loanPools.map(({ Loans }) => _fetchCollateralRewards(api, Loans, address)));
-}
+// async function fetchCollateralRewards(api: ApiPromise, address: string) {
+//   const pools = await api.query.rewards.poolInfos.entries();
+//   const loanPools = pools.map(([key, _]) => key.toHuman()[0]).filter((token) => Object.keys(token)[0] === "Loans");
+//   return Promise.all(loanPools.map(({ Loans }) => _fetchCollateralRewards(api, Loans, address)));
+// }
 
-async function _fetchCollateralRewards(api: ApiPromise, pool: any, address: string) {
+async function fetchCollateralRewards(api: ApiPromise, address: string) {
+  const pool = { Token: "ACA" };
   const res = (await Promise.all([
-    api.query.rewards.poolInfos({ Loans: pool }),
-    api.query.rewards.sharesAndWithdrawnRewards({ Loans: pool }, address),
+    api.query.rewards.poolInfos({ Earning: pool }),
+    api.query.rewards.sharesAndWithdrawnRewards({ Earning: pool }, address),
     getAllTokens(),
   ])) as any;
   const pendingRewards = (!!api.query.incentives.pendingMultiRewards
-    ? await api.query.incentives?.pendingMultiRewards({ Loans: pool }, address)
+    ? await api.query.incentives?.pendingMultiRewards({ Earning: pool }, address)
     : null) as any;
   let proportion = new FixedPointNumber(0);
   if (res[0] && res[1] && FPNum(res[0].totalShares).gt(new FixedPointNumber(0))) {
@@ -442,14 +448,16 @@ async function _fetchCollateralRewards(api: ApiPromise, pool: any, address: stri
       });
     }
   });
-  return {
-    tokenNameId: forceToCurrencyName(api.createType("AcalaPrimitivesCurrencyCurrencyId" as any, pool)),
-    pool,
-    sharesTotal: res[0].totalShares,
-    shares: res[1][0],
-    proportion: proportion.toNumber() || 0,
-    reward: incentives.filter((e) => !!e.amount && e.amount > 0),
-  };
+  return [
+    {
+      tokenNameId: forceToCurrencyName(api.createType("AcalaPrimitivesCurrencyCurrencyId" as any, pool)),
+      pool,
+      sharesTotal: res[0].totalShares,
+      shares: res[1][0],
+      proportion: proportion.toNumber() || 0,
+      reward: incentives.filter((e) => !!e.amount && e.amount > 0),
+    },
+  ];
 }
 
 /**
@@ -657,6 +665,7 @@ async function queryIncentives(api: ApiPromise) {
     Dex: {},
     DexSaving: {},
     Loans: {},
+    Earning: {},
   };
   const epoch = Number(api.consts.incentives.accumulatePeriod.toString());
   const epochOfYear = SECONDS_OF_YEAR.mul(new BN(1000))

@@ -77,7 +77,8 @@ class _LoanDepositPageState extends State<LoanDepositPage> {
     if (error != null) {
       return error;
     }
-    if (Fmt.tokenInt(value, collateralDecimals!) > available) {
+    final valueInt = Fmt.tokenInt(value, collateralDecimals!);
+    if (valueInt > available) {
       return dic!['amount.low'];
     }
 
@@ -92,10 +93,16 @@ class _LoanDepositPageState extends State<LoanDepositPage> {
     final token = _token ?? balancePair[0];
     final _loan = widget.plugin.store!.loan.loans[params['tokenNameId']];
 
+    final minLabel = I18n.of(context)!
+        .getDic(i18n_full_dic_acala, 'acala')!['homa.pool.min'];
     if (params["type"] == LoanDepositPage.actionTypeDeposit) {
-      collateral = Fmt.tokenInt(value, collateralDecimals) + deposit;
+      collateral = valueInt + deposit;
+      if (valueInt > BigInt.zero &&
+          valueInt < Fmt.balanceInt('10000000000000')) {
+        return '$minLabel  10';
+      }
     } else {
-      collateral = deposit - Fmt.tokenInt(value, collateralDecimals);
+      collateral = deposit - valueInt;
     }
     if ((_loan == null || _loan.debits == BigInt.zero) &&
         collateral > BigInt.zero &&
@@ -120,7 +127,7 @@ class _LoanDepositPageState extends State<LoanDepositPage> {
       case LoanDepositPage.actionTypeDeposit:
         return {
           'detail': {
-            dic!['loan.deposit']: Text(
+            'Stake': Text(
               '${_amountCtrl.text.trim()} ${PluginFmt.tokenView(balancePair[0].symbol)}',
               style: Theme.of(context)
                   .textTheme
@@ -128,16 +135,12 @@ class _LoanDepositPageState extends State<LoanDepositPage> {
                   ?.copyWith(color: Colors.white),
             ),
           },
-          'params': [
-            balancePair[0].currencyId,
-            _amountCollateral.toString(),
-            0,
-          ]
+          'params': [_amountCollateral.toString()]
         };
       case LoanDepositPage.actionTypeWithdraw:
         return {
           'detail': {
-            dic!['loan.withdraw']: Text(
+            'Unstake': Text(
               '${_amountCtrl.text.trim()} ${PluginFmt.tokenView(balancePair[0].symbol)}',
               style: Theme.of(context)
                   .textTheme
@@ -145,11 +148,7 @@ class _LoanDepositPageState extends State<LoanDepositPage> {
                   ?.copyWith(color: Colors.white),
             ),
           },
-          'params': [
-            balancePair[0].currencyId,
-            (BigInt.zero - _amountCollateral).toString(),
-            0,
-          ]
+          'params': [(BigInt.zero - _amountCollateral).toString()]
         };
       default:
         return {};
@@ -162,8 +161,8 @@ class _LoanDepositPageState extends State<LoanDepositPage> {
 
     final res = (await Navigator.of(context).pushNamed(TxConfirmPage.route,
         arguments: TxConfirmParams(
-          module: 'honzon',
-          call: 'adjustLoanByDebitValue',
+          module: 'earning',
+          call: params['detail']['Stake'] != null ? 'bond' : 'unbond',
           txTitle: title,
           txDisplayBold: params['detail'],
           params: params['params'],
@@ -225,16 +224,19 @@ class _LoanDepositPageState extends State<LoanDepositPage> {
     BigInt available = balance;
 
     if (params["type"] == LoanDepositPage.actionTypeWithdraw) {
+      available = widget.plugin.store!.loan
+              .collateralRewards[params['tokenNameId']]?.shares ??
+          BigInt.zero;
       // max to withdraw
-      if (loan == null) {
-        available = widget.plugin.store!.loan
-                .collateralRewards[token.tokenNameId]?.shares ??
-            BigInt.zero;
-      } else {
-        available = loan.collaterals - loan.requiredCollateral > BigInt.zero
-            ? loan.collaterals - loan.requiredCollateral
-            : BigInt.zero;
-      }
+      // if (loan == null) {
+      //   available = widget.plugin.store!.loan
+      //           .collateralRewards[token.tokenNameId]?.shares ??
+      //       BigInt.zero;
+      // } else {
+      //   available = loan.collaterals - loan.requiredCollateral > BigInt.zero
+      //       ? loan.collaterals - loan.requiredCollateral
+      //       : BigInt.zero;
+      // }
     }
 
     final availableView =

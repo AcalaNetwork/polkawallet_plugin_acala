@@ -3,7 +3,7 @@ class IncentivesData extends _IncentivesData {
     final res = new IncentivesData();
     res.dex = Map.from(json['Dex']).map((k, v) => MapEntry(
         k, List.of(v).map((e) => IncentiveItemData.fromJson(e)).toList()));
-    res.loans = Map.from(json['Loans']).map((k, v) => MapEntry(
+    res.loans = Map.from(json['Earning']).map((k, v) => MapEntry(
         k, List.of(v).map((e) => IncentiveItemData.fromJson(e)).toList()));
     return res;
   }

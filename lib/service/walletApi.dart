@@ -7,6 +7,8 @@ class WalletApi {
   static const String _configEndpoint = 'https://acala.polkawallet-cloud.com';
   static const String _cdnEndpoint = 'https://cdn.polkawallet-cloud.com';
 
+  static const _loyalBonusApi = 'https://api.polkawallet.io/dapps/earn-loyalty';
+
   static Future<Map?> getTokenPrice(List<String?> tokens) async {
     final url = '$_endpoint/price-server?from=market&token=${tokens.join(',')}';
     try {
@@ -70,6 +72,28 @@ class WalletApi {
       } else {
         return jsonDecode(res.body) as Map;
       }
+    } catch (err) {
+      print(err);
+      return null;
+    }
+  }
+
+  static Future<Map?> getKarLoyalBonus() async {
+    try {
+      final res = await get(
+          Uri.parse('$_loyalBonusApi/loyalty-bonus-acc-reward?chain=acala'));
+      return jsonDecode(utf8.decode(res.bodyBytes));
+    } catch (err) {
+      print(err);
+      return null;
+    }
+  }
+
+  static Future<Map?> getKarLoyalBonusUser(String address) async {
+    try {
+      final res = await get(Uri.parse(
+          '$_loyalBonusApi/user-loyalty-bonus?chain=acala&address=$address'));
+      return jsonDecode(utf8.decode(res.bodyBytes));
     } catch (err) {
       print(err);
       return null;
