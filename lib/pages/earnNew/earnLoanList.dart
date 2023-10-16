@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:polkawallet_plugin_acala/api/earn/types/incentivesData.dart';
 import 'package:polkawallet_plugin_acala/pages/loanNew/loanDepositPage.dart';
+import 'package:polkawallet_plugin_acala/pages/loanNew/loanInfoPanel.dart';
 import 'package:polkawallet_plugin_acala/polkawallet_plugin_acala.dart';
 import 'package:polkawallet_plugin_acala/service/walletApi.dart';
 import 'package:polkawallet_plugin_acala/utils/assets.dart';
@@ -12,7 +13,6 @@ import 'package:polkawallet_sdk/storage/keyring.dart';
 import 'package:polkawallet_sdk/utils/i18n.dart';
 import 'package:polkawallet_ui/components/connectionChecker.dart';
 import 'package:polkawallet_ui/components/v3/dialog.dart';
-import 'package:polkawallet_ui/components/v3/infoItemRow.dart';
 import 'package:polkawallet_ui/components/v3/plugin/pluginInfoItem.dart';
 import 'package:polkawallet_ui/components/v3/plugin/pluginOutlinedButtonSmall.dart';
 import 'package:polkawallet_ui/components/v3/plugin/pluginPopLoadingWidget.dart';
@@ -39,8 +39,6 @@ class _EarnLoanListState extends State<EarnLoanList> {
   BigInt _loyalty = BigInt.zero;
   BigInt _loyaltyUser = BigInt.zero;
 
-  bool _fetching = false;
-
   Future<void> _fetchKarIssuance() async {
     final res = await widget.plugin.sdk.webView
         ?.evalJavascript('api.query.balances.totalIssuance()');
@@ -61,10 +59,6 @@ class _EarnLoanListState extends State<EarnLoanList> {
   }
 
   Future<void> _updateLoyaltyBonusUser() async {
-    setState(() {
-      _fetching = true;
-    });
-
     final res =
         await WalletApi.getKarLoyalBonusUser(widget.keyring.current.address!);
     final loyaltyUserList = (res ?? {})['data']['list'] as List;
@@ -77,7 +71,6 @@ class _EarnLoanListState extends State<EarnLoanList> {
       if (loyaltyUser > BigInt.zero) {
         setState(() {
           _loyaltyUser = loyaltyUser;
-          _fetching = false;
         });
       }
     }
@@ -103,8 +96,6 @@ class _EarnLoanListState extends State<EarnLoanList> {
 
   Future<void> _onClaimReward(Map<String?, List<IncentiveItemData>>? incentives,
       TokenBalanceData token, String rewardView) async {
-    if (_fetching) return;
-
     final dic = I18n.of(context)!.getDic(i18n_full_dic_acala, 'acala')!;
     double? loyaltyBonus = 0;
     if (incentives![token.tokenNameId] != null) {
@@ -272,12 +263,18 @@ class _EarnLoanListState extends State<EarnLoanList> {
     final token = AssetsUtils.getBalanceFromTokenNameId(widget.plugin, 'ACA');
     final incentives = widget.plugin.store!.earn.incentives.loans;
     double apy = 0;
-    double emission = 0;
-    if (incentives![token.tokenNameId] != null) {
+    String emissionView = '';
+    if (incentives != null && incentives[token.tokenNameId] != null) {
       incentives[token.tokenNameId]!.forEach((e) {
         if (e.tokenNameId != 'Any') {
           apy += e.apr ?? 0;
-          emission += e.amount ?? 0;
+          if (emissionView.isEmpty) {
+            emissionView =
+                '${Fmt.priceFloor((e.amount ?? 0) / 365 * 31)} ${PluginFmt.tokenView(e.tokenNameId)}/Month';
+          } else {
+            emissionView +=
+                '\n${Fmt.priceFloor((e.amount ?? 0) / 365 * 31)} ${PluginFmt.tokenView(e.tokenNameId)}/Month';
+          }
         }
       });
     }
@@ -294,9 +291,7 @@ class _EarnLoanListState extends State<EarnLoanList> {
             if (amount > 0.0001) {
               canClaim = true;
             }
-            final rewardToken = AssetsUtils.getBalanceFromTokenNameId(
-                widget.plugin, e['tokenNameId']);
-            return '${Fmt.priceFloor(amount.toDouble(), lengthMax: 4)} ${PluginFmt.tokenView(rewardToken.symbol)}';
+            return '${Fmt.priceFloor(amount.toDouble(), lengthMax: 4)} ${PluginFmt.tokenView(e['tokenNameId'])}';
           }).join(' + ')
         : '0.00';
 
@@ -345,18 +340,17 @@ class _EarnLoanListState extends State<EarnLoanList> {
                         ),
                       ]),
                       Divider(),
-                      InfoItemRow('ACA ${dic['earn.kar.volume']}',
+                      LoanInfoItemRow('ACA ${dic['earn.kar.volume']}',
                           '${Fmt.priceFloorBigInt(_totalKar, 12)} ACA'),
-                      InfoItemRow(dic['earn.kar.pool']!,
+                      LoanInfoItemRow(dic['earn.kar.pool']!,
                           '${Fmt.priceFloorBigInt(reward?.sharesTotal, 12)} ACA'),
-                      InfoItemRow(
+                      LoanInfoItemRow(
                           dic['earn.kar.rate']!,
                           Fmt.ratio((reward?.sharesTotal ?? BigInt.zero) /
                               _totalKar)),
                       Divider(),
-                      InfoItemRow(dic['earn.kar.emission']!,
-                          '${Fmt.priceFloor(emission / 365 * 31)} ACA/Month'),
-                      InfoItemRow(dic['earn.kar.loyalty']!,
+                      LoanInfoItemRow(dic['earn.kar.emission']!, emissionView),
+                      LoanInfoItemRow(dic['earn.kar.loyalty']!,
                           '${Fmt.priceFloorBigInt(_loyalty, 12)} ACA'),
                     ],
                   ),

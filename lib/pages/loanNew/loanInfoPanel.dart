@@ -34,107 +34,65 @@ class LoanInfoPanel extends StatelessWidget {
     return Column(
       children: <Widget>[
         Visibility(
-            visible: debits != null,
-            child: Padding(
-                padding: EdgeInsets.only(bottom: 5),
-                child: InfoItemRow(
-                  dic['loan.borrowed']!,
-                  debits ?? '',
-                  labelStyle: Theme.of(context).textTheme.headline4?.copyWith(
-                      color: Colors.white, fontWeight: FontWeight.w600),
-                  contentStyle: Theme.of(context).textTheme.headline4?.copyWith(
-                      color: Colors.white, fontWeight: FontWeight.w400),
-                ))),
+          visible: debits != null,
+          child: LoanInfoItemRow(
+            dic['loan.borrowed']!,
+            debits ?? '',
+          ),
+        ),
         Visibility(
-            visible: collateral != null,
-            child: Padding(
-                padding: EdgeInsets.only(bottom: 5),
-                child: InfoItemRow(
-                  dic['loan.collateral']!,
-                  collateral ?? '',
-                  labelStyle: Theme.of(context).textTheme.headline4?.copyWith(
-                      color: Colors.white, fontWeight: FontWeight.w600),
-                  contentStyle: Theme.of(context).textTheme.headline4?.copyWith(
-                      color: Colors.white, fontWeight: FontWeight.w400),
-                ))),
-        Padding(
-            padding: EdgeInsets.only(bottom: 5),
-            child: InfoItemRow(
-              dic['collateral.price.current']!,
-              '\$$priceString',
-              labelStyle: Theme.of(context)
-                  .textTheme
-                  .headline4
-                  ?.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
-              contentStyle: Theme.of(context)
-                  .textTheme
-                  .headline4
-                  ?.copyWith(color: Colors.white, fontWeight: FontWeight.w400),
-            )),
-        Padding(
-            padding: EdgeInsets.only(bottom: 5),
-            child: InfoItemRow(
-              dic['liquid.ratio.require']!,
-              Fmt.ratio(
-                double.parse(
-                  Fmt.token(requiredRatio, acala_price_decimals),
-                ),
-              ),
-              labelStyle: Theme.of(context)
-                  .textTheme
-                  .headline4
-                  ?.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
-              contentStyle: Theme.of(context)
-                  .textTheme
-                  .headline4
-                  ?.copyWith(color: Colors.white, fontWeight: FontWeight.w400),
-            )),
-        Padding(
-            padding: EdgeInsets.only(bottom: 5),
-            child: InfoItemRow(
-              dic['liquid.ratio.current']!,
-              Fmt.ratio(currentRatio),
-              colorPrimary: true,
-              labelStyle: Theme.of(context)
-                  .textTheme
-                  .headline4
-                  ?.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
-              contentStyle: Theme.of(context)
-                  .textTheme
-                  .headline4
-                  ?.copyWith(color: Colors.white, fontWeight: FontWeight.w400),
-            )),
-        Padding(
-            padding: EdgeInsets.only(bottom: 5),
-            child: InfoItemRow(
-              dic['liquid.price']!,
-              '\$$liquidationPriceString',
-              colorPrimary: true,
-              labelStyle: Theme.of(context)
-                  .textTheme
-                  .headline4
-                  ?.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
-              contentStyle: Theme.of(context)
-                  .textTheme
-                  .headline4
-                  ?.copyWith(color: Colors.white, fontWeight: FontWeight.w400),
-            )),
-        Padding(
-            padding: EdgeInsets.only(bottom: 5),
-            child: InfoItemRow(
-              dic['collateral.interest']!,
-              Fmt.ratio(stableFeeYear),
-              colorPrimary: true,
-              labelStyle: Theme.of(context)
-                  .textTheme
-                  .headline4
-                  ?.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
-              contentStyle: Theme.of(context)
-                  .textTheme
-                  .headline4
-                  ?.copyWith(color: Colors.white, fontWeight: FontWeight.w400),
-            )),
+          visible: collateral != null,
+          child: LoanInfoItemRow(
+            dic['loan.collateral']!,
+            collateral ?? '',
+          ),
+        ),
+        LoanInfoItemRow(
+          dic['collateral.price.current']!,
+          '\$$priceString',
+        ),
+        LoanInfoItemRow(
+          dic['liquid.ratio.require']!,
+          Fmt.ratio(
+              double.parse(Fmt.token(requiredRatio, acala_price_decimals))),
+        ),
+        LoanInfoItemRow(
+          dic['liquid.ratio.current']!,
+          Fmt.ratio(currentRatio),
+        ),
+        LoanInfoItemRow(
+          dic['liquid.price']!,
+          '\$$liquidationPriceString',
+        ),
+        LoanInfoItemRow(
+          dic['collateral.interest']!,
+          Fmt.ratio(stableFeeYear),
+        ),
       ],
+    );
+  }
+}
+
+class LoanInfoItemRow extends StatelessWidget {
+  LoanInfoItemRow(this.title, this.content);
+  final String title;
+  final String content;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 5),
+      child: InfoItemRow(
+        title,
+        content,
+        labelStyle: Theme.of(context)
+            .textTheme
+            .headline4
+            ?.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+        contentStyle: Theme.of(context)
+            .textTheme
+            .headline4
+            ?.copyWith(color: Colors.white, fontWeight: FontWeight.w400),
+      ),
     );
   }
 }
