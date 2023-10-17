@@ -16,6 +16,8 @@ import 'package:polkawallet_plugin_acala/pages/assets/tokenDetailPage.dart';
 import 'package:polkawallet_plugin_acala/pages/assets/transferDetailPage.dart';
 import 'package:polkawallet_plugin_acala/pages/assets/transferPage.dart';
 import 'package:polkawallet_plugin_acala/pages/currencySelectPage.dart';
+import 'package:polkawallet_plugin_acala/pages/earnNew/earnRebondPage.dart';
+import 'package:polkawallet_plugin_acala/pages/earnNew/earningUnbondPage.dart';
 import 'package:polkawallet_plugin_acala/pages/governanceNew/governancePage.dart';
 import 'package:polkawallet_plugin_acala/pages/multiply/multiplyCreatePage.dart';
 import 'package:polkawallet_plugin_acala/pages/multiply/multiplyPage.dart';
@@ -243,6 +245,9 @@ class PluginAcala extends PolkawalletPlugin {
       //multiply
       MultiplyPage.route: (_) => MultiplyPage(this, keyring),
       MultiplyCreatePage.route: (_) => MultiplyCreatePage(this, keyring),
+
+      EarningUnbondPage.route: (_) => EarningUnbondPage(this, keyring),
+      EarningRebondPage.route: (_) => EarningRebondPage(this, keyring),
     };
   }
 
