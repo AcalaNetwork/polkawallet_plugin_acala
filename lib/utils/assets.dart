@@ -4,7 +4,7 @@ import 'package:polkawallet_sdk/plugin/store/balances.dart';
 
 class AssetsUtils {
   static const categoryTokens = 'Tokens';
-  static const categoryVaults = 'Vaults';
+  static const categoryStaking = 'Staking';
   static const categoryLP = 'LP Staking';
   static const categoryLPFree = 'LP Free';
   static const categoryRewards = 'Rewards';
@@ -41,7 +41,7 @@ class AssetsUtils {
     final List<AggregatedAssetsData> list = [
       _getDataItem(categoryRewards),
       _getDataItem(categoryLP),
-      _getDataItem(categoryVaults),
+      _getDataItem(categoryStaking),
       _getDataItem(categoryTokens),
       _getDataItem(categoryLPFree),
     ];

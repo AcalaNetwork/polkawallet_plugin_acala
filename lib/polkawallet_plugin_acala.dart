@@ -205,13 +205,13 @@ class PluginAcala extends PolkawalletPlugin {
 
   Color _instrumentColor(String? category) {
     switch (category) {
-      case "Tokens":
+      case AssetsUtils.categoryTokens:
         return Color(0xFF5E5C59);
-      case "Vaults":
+      case AssetsUtils.categoryStaking:
         return Color(0xFFFF7647);
-      case "LP Staking":
+      case AssetsUtils.categoryLP:
         return Color(0xFF7D97EE);
-      case "Rewards":
+      case AssetsUtils.categoryRewards:
         return Color(0xFFFFC952);
       default:
         return Color(0xFFFFC952);

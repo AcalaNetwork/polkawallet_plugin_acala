@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:polkawallet_plugin_acala/api/earn/types/incentivesData.dart';
+import 'package:polkawallet_plugin_acala/api/types/loanType.dart';
 import 'package:polkawallet_plugin_acala/pages/earnNew/earningUnbondPage.dart';
 import 'package:polkawallet_plugin_acala/pages/loanNew/loanDepositPage.dart';
 import 'package:polkawallet_plugin_acala/pages/loanNew/loanInfoPanel.dart';
@@ -40,10 +41,33 @@ class _EarnLoanListState extends State<EarnLoanList> {
   BigInt _totalKar = BigInt.zero;
   BigInt _loyalty = BigInt.zero;
   BigInt _loyaltyUser = BigInt.zero;
+  TokenBalanceData? _deductionToken;
 
   BigInt _staked = BigInt.zero;
   BigInt _active = BigInt.zero;
   List<List<BigInt>> _unlocking = [];
+
+  String _getRewardView(
+    CollateralRewardData? reward, {
+    double deduction = 0,
+    String? onlyToken,
+    bool isBurn = false,
+  }) {
+    if (reward != null && reward.reward!.length > 0) {
+      if (onlyToken != null && isBurn) {
+        reward.reward!.retainWhere((e) => e['tokenNameId'] == onlyToken);
+      }
+      final proportion = isBurn ? deduction : 1 - deduction;
+      return reward.reward!.map((e) {
+        num amount = e['amount'];
+        if (amount < 0) {
+          amount = 0;
+        }
+        return '${Fmt.priceFloor(amount.toDouble() * proportion, lengthMax: reward.reward!.length > 1 ? 2 : 4)} ${e['tokenNameId']}';
+      }).join(' + ');
+    }
+    return '0.00';
+  }
 
   Future<void> _fetchUserStaked() async {
     final res = await widget.plugin.sdk.webView?.evalJavascript(
@@ -68,6 +92,18 @@ class _EarnLoanListState extends State<EarnLoanList> {
     setState(() {
       _totalKar = Fmt.balanceInt(res.toString());
     });
+  }
+
+  Future<void> _fetchDeductionCurrency() async {
+    final res = await widget.plugin.api!.earn.getIncentiveDeductionCurrency({
+      'Earning': {'Token': 'KAR'}
+    });
+    if (res != null && mounted) {
+      setState(() {
+        _deductionToken =
+            AssetsUtils.tokenDataFromCurrencyId(widget.plugin, res);
+      });
+    }
   }
 
   Future<void> _fetchLoyaltyBonus() async {
@@ -102,6 +138,8 @@ class _EarnLoanListState extends State<EarnLoanList> {
   Future<void> _fetchData() async {
     _fetchKarIssuance();
     _fetchLoyaltyBonus();
+    _fetchDeductionCurrency();
+
     _updateLoyaltyBonusUser();
     _fetchUserStaked();
 
@@ -119,7 +157,7 @@ class _EarnLoanListState extends State<EarnLoanList> {
   }
 
   Future<void> _onClaimReward(Map<String?, List<IncentiveItemData>>? incentives,
-      TokenBalanceData token, String rewardView) async {
+      TokenBalanceData token, CollateralRewardData? reward) async {
     final dic = I18n.of(context)!.getDic(i18n_full_dic_acala, 'acala')!;
     double? loyaltyBonus = 0;
     if (incentives![token.tokenNameId] != null) {
@@ -166,7 +204,8 @@ class _EarnLoanListState extends State<EarnLoanList> {
                         color: Colors.black,
                         fontSize: UI.getTextSize(13, context))),
                 TextSpan(
-                    text: Fmt.blockToTime(blocksToEnd ?? 0, 12500,
+                    text: Fmt.blockToTime(blocksToEnd ?? 0,
+                        widget.plugin.store!.earn.blockDuration,
                         locale: I18n.of(context)!.locale.toString()),
                     style: Theme.of(context).textTheme.bodyText1?.copyWith(
                         color: Color(0xFFFF3B30),
@@ -194,9 +233,8 @@ class _EarnLoanListState extends State<EarnLoanList> {
           });
     }
 
-    final total = double.tryParse(rewardView.split(' ')[0]);
-    final forego = (total ?? 0) * (loyaltyBonus ?? 0);
-    final receive = (total ?? 0) * (1 - (loyaltyBonus ?? 0));
+    final receive = _getRewardView(reward,
+        deduction: loyaltyBonus ?? 0, onlyToken: _deductionToken?.symbol);
     isClaim = await showCupertinoDialog(
         context: context,
         builder: (_) {
@@ -219,8 +257,8 @@ class _EarnLoanListState extends State<EarnLoanList> {
                           fontSize: UI.getTextSize(13, context))),
                   TextSpan(
                       text: I18n.of(context)!.locale.toString().contains('zh')
-                          ? "的收益损失。"
-                          : " of the total rewards.",
+                          ? "的${_deductionToken != null ? _deductionToken?.symbol : ''}收益损失。"
+                          : " of the ${_deductionToken != null ? _deductionToken?.symbol : 'total'} rewards.",
                       style: Theme.of(context).textTheme.bodyText1?.copyWith(
                           color: Colors.black,
                           fontSize: UI.getTextSize(13, context))),
@@ -230,21 +268,31 @@ class _EarnLoanListState extends State<EarnLoanList> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(dic['earn.reward']!),
-                    Text(rewardView),
+                    Expanded(
+                        child: Text(
+                      _getRewardView(reward),
+                      textAlign: TextAlign.end,
+                    )),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(dic['earn.loyalty.forego']!),
-                    Text(Fmt.priceCeil(forego, lengthMax: 4) + ' ACA'),
+                    Expanded(
+                        child: Text(
+                            _getRewardView(reward,
+                                deduction: loyaltyBonus ?? 0,
+                                onlyToken: _deductionToken?.symbol,
+                                isBurn: true),
+                            textAlign: TextAlign.end)),
                   ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(dic['earn.loyalty.receive']!),
-                    Text(Fmt.priceFloor(receive, lengthMax: 4) + ' ACA'),
+                    Expanded(child: Text(receive, textAlign: TextAlign.end)),
                   ],
                 ),
               ],
@@ -270,7 +318,7 @@ class _EarnLoanListState extends State<EarnLoanList> {
         call: 'claimRewards',
         txTitle: dic['earn.claim'],
         txDisplay: {
-          dic['loan.amount']: '≈ ${Fmt.priceFloor(receive, lengthMax: 4)} ACA',
+          dic['loan.amount']: '≈ $receive',
           dic['earn.stake.pool']: token.symbol,
         },
         params: [pool],
@@ -313,18 +361,12 @@ class _EarnLoanListState extends State<EarnLoanList> {
     bool canClaim = false;
     final reward =
         widget.plugin.store!.loan.collateralRewards[token.tokenNameId];
-    final rewardView = reward != null && reward.reward!.length > 0
-        ? reward.reward!.map((e) {
-            num amount = e['amount'];
-            if (amount < 0) {
-              amount = 0;
-            }
-            if (amount > 0.0001) {
-              canClaim = true;
-            }
-            return '${Fmt.priceFloor(amount.toDouble(), lengthMax: 4)} ${PluginFmt.tokenView(e['tokenNameId'])}';
-          }).join(' + ')
-        : '0.00';
+    reward?.reward?.forEach((e) {
+      final num amount = e['amount'];
+      if (amount > 0.0001) {
+        canClaim = true;
+      }
+    });
 
     final maxUnbondingChunks = Fmt.balanceInt(widget
         .plugin.networkConst['earning']['maxUnbondingChunks']
@@ -421,7 +463,7 @@ class _EarnLoanListState extends State<EarnLoanList> {
                                 isExpanded: false,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 title: dic['earn.reward'],
-                                content: rewardView,
+                                content: _getRewardView(reward),
                                 titleStyle: Theme.of(context)
                                     .textTheme
                                     .headline5
@@ -475,8 +517,8 @@ class _EarnLoanListState extends State<EarnLoanList> {
                                         CrossAxisAlignment.center,
                                     title:
                                         '${dic['earn.available']} (${PluginFmt.tokenView(token.symbol)})',
-                                    content: Fmt.priceFloorBigInt(
-                                        Fmt.balanceInt(token.amount), 12),
+                                    content:
+                                        Fmt.priceFloorBigInt(available, 12),
                                     titleStyle: Theme.of(context)
                                         .textTheme
                                         .headline5
@@ -627,7 +669,7 @@ class _EarnLoanListState extends State<EarnLoanList> {
                                   margin: EdgeInsets.zero,
                                   onPressed: canClaim
                                       ? () => _onClaimReward(
-                                          incentives, token, rewardView)
+                                          incentives, token, reward)
                                       : null,
                                 ),
                               ),

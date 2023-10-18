@@ -54,15 +54,6 @@ class EarnTxDetailPage extends StatelessWidget {
           content:
               Text(dic[earn_actions_map[tx.event]] ?? "", style: amountStyle),
         ),
-        TxDetailInfoItem(
-          label: dic['earn.stake.pool'],
-          content: Text(tx.poolId, style: amountStyle),
-        ),
-        TxDetailInfoItem(
-          label: I18n.of(context)!
-              .getDic(i18n_full_dic_acala, 'common')!['amount'],
-          content: Text(tx.amountShare!, style: amountStyle),
-        )
       ],
     );
   }

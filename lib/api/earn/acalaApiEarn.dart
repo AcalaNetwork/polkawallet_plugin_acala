@@ -53,4 +53,9 @@ class AcalaApiEarn {
   Future<int> getBlockDuration() async {
     return service.getBlockDuration();
   }
+
+  Future<Map?> getIncentiveDeductionCurrency(Map pool) async {
+    final res = await service.getIncentiveDeductionCurrency(pool);
+    return res;
+  }
 }

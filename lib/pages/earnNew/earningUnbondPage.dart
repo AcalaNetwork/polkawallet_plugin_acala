@@ -103,7 +103,8 @@ class _EarningUnbondPageState extends State<EarningUnbondPage> {
                                       e[1] - bestNumber > BigInt.zero
                                           ? Fmt.blockToTime(
                                               (e[1] - bestNumber).toInt(),
-                                              12500)
+                                              widget.plugin.store!.earn
+                                                  .blockDuration)
                                           : dic['earn.unbond.ready']!,
                                       style: titleStyle)),
                               Text(Fmt.priceFloorBigInt(e[0], 12) + ' ACA',

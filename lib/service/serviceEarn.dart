@@ -18,6 +18,8 @@ class ServiceEarn {
   final PluginStore? store;
 
   IncentivesData _calcIncentivesAPR(IncentivesData data) {
+    /// the APY calc with block duration 12000, but other data use 12500.
+    /// so we need to do (* 125 / 120) for APY.
     final pools = plugin.store!.earn.dexPools.toList();
     data.dex!.forEach((k, v) {
       final poolIndex = pools.indexWhere((e) => e.tokenNameId == k);
@@ -51,7 +53,7 @@ class ServiceEarn {
         final rate = e.amount! *
             AssetsUtils.getMarketPrice(plugin, rewardToken.symbol ?? '') /
             stakingPoolValue;
-        e.apr = rate > 0 ? rate : 0;
+        e.apr = rate > 0 ? rate * 125 / 120 : 0;
       });
     });
 
@@ -66,7 +68,9 @@ class ServiceEarn {
               e.amount! /
               Fmt.bigIntToDouble(
                   rewards[k]?.sharesTotal, poolToken.decimals ?? 12) /
-              AssetsUtils.getMarketPrice(plugin, poolToken.symbol ?? '');
+              AssetsUtils.getMarketPrice(plugin, poolToken.symbol ?? '') *
+              125 /
+              120;
         }
       });
     });

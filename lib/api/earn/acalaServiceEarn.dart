@@ -56,4 +56,10 @@ class AcalaServiceEarn {
         await plugin.sdk.webView!.evalJavascript('acala.getBlockDuration()');
     return res;
   }
+
+  Future<Map?> getIncentiveDeductionCurrency(Map pool) async {
+    final res = await plugin.sdk.webView!.evalJavascript(
+        'acala.queryIncentiveDeductionCurrency(api, ${jsonEncode(pool)})');
+    return res;
+  }
 }
