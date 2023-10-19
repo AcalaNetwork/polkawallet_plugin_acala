@@ -18,8 +18,8 @@ class TxDexIncentiveData extends _TxDexIncentiveData {
   static const String actionEarnUnbond = 'earning.Unbonded';
   static const String actionEarnBond = 'earning.Bonded';
   static const String actionEarnRebond = 'earning.Rebonded';
-  static const String actionBondFilter = 'Stake KAR';
-  static const String actionUnbondFilter = 'Unstake KAR';
+  static const String actionBondFilter = 'Stake ACA';
+  static const String actionUnbondFilter = 'Unstake ACA';
 
   static const String actionStakeFilter = 'Stake LP';
   static const String actionUnStakeFilter = 'Unstake LP';
