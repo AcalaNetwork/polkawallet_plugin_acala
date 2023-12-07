@@ -28,7 +28,7 @@ class _EarningUnbondPageState extends State<EarningUnbondPage> {
     final dic = I18n.of(context)!.getDic(i18n_full_dic_acala, 'acala')!;
 
     final params = TxConfirmParams(
-      module: 'earn',
+      module: 'earning',
       call: 'withdrawUnbonded',
       txTitle: dic['earn.unbond.withdraw'],
       txDisplay: {
