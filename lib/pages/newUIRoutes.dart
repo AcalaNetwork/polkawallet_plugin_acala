@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:polkawallet_plugin_acala/common/constants/base.dart';
 import 'package:polkawallet_plugin_acala/pages/earnNew/LPStakePage.dart';
 import 'package:polkawallet_plugin_acala/pages/earnNew/addLiquidityPage.dart';
 import 'package:polkawallet_plugin_acala/pages/earnNew/earnDetailPage.dart';
@@ -25,8 +24,6 @@ import 'package:polkawallet_plugin_acala/pages/loanNew/loanDepositPage.dart';
 import 'package:polkawallet_plugin_acala/pages/loanNew/loanHistoryPage.dart';
 import 'package:polkawallet_plugin_acala/pages/loanNew/loanPage.dart';
 import 'package:polkawallet_plugin_acala/pages/loanNew/loanTxDetailPage.dart';
-import 'package:polkawallet_plugin_acala/pages/multiply/multiplyHistoryPage.dart';
-import 'package:polkawallet_plugin_acala/pages/multiply/multiplyTxDetailPage.dart';
 import 'package:polkawallet_plugin_acala/pages/nftNew/nftPage.dart';
 import 'package:polkawallet_plugin_acala/pages/nftNew/nftTransferPage.dart';
 import 'package:polkawallet_plugin_acala/pages/swapNew/bootstrapPage.dart';
@@ -34,7 +31,6 @@ import 'package:polkawallet_plugin_acala/pages/swapNew/swapDetailPage.dart';
 import 'package:polkawallet_plugin_acala/pages/swapNew/swapHistoryPage.dart';
 import 'package:polkawallet_plugin_acala/pages/swapNew/swapPage.dart';
 import 'package:polkawallet_plugin_acala/polkawallet_plugin_acala.dart';
-import 'package:polkawallet_plugin_acala/service/graphql.dart';
 import 'package:polkawallet_sdk/storage/keyring.dart';
 
 Map<String, WidgetBuilder> getNewUiRoutes(PluginAcala plugin, Keyring keyring) {
@@ -89,16 +85,6 @@ Map<String, WidgetBuilder> getNewUiRoutes(PluginAcala plugin, Keyring keyring) {
           //governanceNew
           GovernancePage.route: (_) => GovernancePage(plugin, keyring),
           ReferendumVotePage.route: (_) => ReferendumVotePage(plugin, keyring),
-
-          //multiply
-          MultiplyHistoryPage.route: (_) => ClientProvider(
-                child: Builder(
-                  builder: (_) => MultiplyHistoryPage(plugin, keyring),
-                ),
-                uri: GraphQLConfig['loanUri']!,
-              ),
-          MultiplyTxDetailPage.route: (_) =>
-              MultiplyTxDetailPage(plugin, keyring),
         }
       : {};
 }

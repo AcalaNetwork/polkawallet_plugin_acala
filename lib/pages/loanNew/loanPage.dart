@@ -4,19 +4,16 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
+// import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:polkawallet_plugin_acala/api/types/loanType.dart';
 import 'package:polkawallet_plugin_acala/api/types/swapOutputData.dart';
-import 'package:polkawallet_plugin_acala/common/constants/base.dart';
 import 'package:polkawallet_plugin_acala/common/constants/index.dart';
-import 'package:polkawallet_plugin_acala/common/constants/subQuery.dart';
 import 'package:polkawallet_plugin_acala/pages/loanNew/loanAdjustPage.dart';
 import 'package:polkawallet_plugin_acala/pages/loanNew/loanCreatePage.dart';
 import 'package:polkawallet_plugin_acala/pages/loanNew/loanHistoryPage.dart';
 import 'package:polkawallet_plugin_acala/pages/loanNew/loanTabBarWidget.dart';
 import 'package:polkawallet_plugin_acala/pages/types/loanPageParams.dart';
 import 'package:polkawallet_plugin_acala/polkawallet_plugin_acala.dart';
-import 'package:polkawallet_plugin_acala/service/graphql.dart';
 import 'package:polkawallet_plugin_acala/utils/assets.dart';
 import 'package:polkawallet_plugin_acala/utils/format.dart';
 import 'package:polkawallet_plugin_acala/utils/i18n/index.dart';
@@ -60,57 +57,6 @@ class _LoanPageState extends State<LoanPage> {
 
   var _isQueryCollateraling = true;
   double _totalMinted = 0.0;
-
-  @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final client = clientFor(uri: GraphQLConfig['loanUri']!);
-
-      final result = await client.value
-          .query(QueryOptions(document: gql(queryCollaterals)));
-
-      final _collateras = [];
-      if (result.data != null) {
-        _collateras.addAll(List.of(result.data!['collaterals']['nodes']));
-      }
-
-      final data = await widget.plugin.sdk.webView!
-          .evalJavascript('api.query.cdpTreasury.debitPool()');
-      var _debit = 0.0;
-      final balancePair = AssetsUtils.getBalancePairFromTokenNameId(
-          widget.plugin, [acala_stable_coin]);
-
-      if (widget.plugin.store!.loan.loanTypes.length == 0) {
-        await widget.plugin.service!.loan
-            .queryLoanTypes(widget.keyring.current.address);
-      }
-      widget.plugin.store!.loan.loanTypes.forEach((element) {
-        if (_collateras
-                .where((e) => e['id'] == element.token?.tokenNameId)
-                .length >
-            0) {
-          final _collater = _collateras
-              .where((e) => e['id'] == element.token?.tokenNameId)
-              .first;
-          final _debitamount = Fmt.balanceDouble(
-              _collater['debitAmount'], balancePair[0].decimals ?? 12);
-          _debit += _debitamount *
-              Fmt.balanceDouble(element.debitExchangeRate.toString(), 18);
-        }
-      });
-
-      if (mounted) {
-        setState(() {
-          _totalMinted = _debit +
-              Fmt.bigIntToDouble(
-                  BigInt.parse(data), balancePair[0].decimals ?? 12);
-          _isQueryCollateraling = false;
-        });
-      }
-    });
-  }
 
   Future<void> _fetchData() async {
     widget.plugin.service!.earn.getDexIncentiveLoyaltyEndBlock();

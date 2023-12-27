@@ -72,6 +72,7 @@ class EarnDetailPage extends StatelessWidget {
           String lpAmountString = '~';
 
           final poolInfo = plugin.store!.earn.dexPoolInfoMap[pool.tokenNameId];
+          double leftPrice = 0, rightPrice = 0;
 
           if (poolInfo != null) {
             issuance = poolInfo.issuance;
@@ -86,6 +87,14 @@ class EarnDetailPage extends StatelessWidget {
             final lpAmount2 = Fmt.bigIntToDouble(
                     poolInfo.amountRight, balancePair[1].decimals!) *
                 poolShare;
+
+            leftPrice = Fmt.bigIntToDouble(
+                    poolInfo.amountLeft, balancePair[0].decimals!) *
+                AssetsUtils.getMarketPrice(plugin, balancePair[0].symbol ?? '');
+
+            rightPrice = Fmt.bigIntToDouble(
+                    poolInfo.amountRight, balancePair[1].decimals!) *
+                AssetsUtils.getMarketPrice(plugin, balancePair[1].symbol ?? '');
 
             lpAmountString =
                 '${Fmt.priceFloor(lpAmount)} ${PluginFmt.tokenView(balancePair[0].symbol)} + ${Fmt.priceFloor(lpAmount2)} ${PluginFmt.tokenView(balancePair[1].symbol)}';
@@ -133,84 +142,20 @@ class EarnDetailPage extends StatelessWidget {
                         padding: EdgeInsets.symmetric(vertical: 11),
                         child: Column(
                           children: [
-                            // Query(
-                            //     options: QueryOptions(
-                            //       document: gql(queryPoolDetail),
-                            //       variables: <String, String?>{
-                            //         'pool': poolInfo!.tokenNameId,
-                            //       },
-                            //     ),
-                            //     builder: (
-                            //       QueryResult result, {
-                            //       Future<QueryResult?> Function()? refetch,
-                            //       FetchMore? fetchMore,
-                            //     }) {
-                            //       if (result.data != null &&
-                            //           result.data!["pools"]["nodes"].length >
-                            //               0 &&
-                            //           result
-                            //                   .data!["pools"]["nodes"][0]
-                            //                       ["dayData"]["nodes"]
-                            //                   .length >
-                            //               0) {
-                            //         final List<TimeSeriesAmount> datas = [];
-                            //         result
-                            //             .data!["pools"]["nodes"][0]["dayData"]
-                            //                 ["nodes"]
-                            //             .reversed
-                            //             .toList()
-                            //             .forEach((element) {
-                            //           datas.add(TimeSeriesAmount(
-                            //               DateTime.parse(element["date"]),
-                            //               Fmt.balanceDouble(
-                            //                   element["tvlUSD"], 18)));
-                            //         });
-                            //         return Column(
-                            //           crossAxisAlignment:
-                            //               CrossAxisAlignment.start,
-                            //           children: [
-                            //             Padding(
-                            //               padding: EdgeInsets.only(left: 50),
-                            //               child: Text(
-                            //                 "TVL: \$${Fmt.priceCeil(leftPrice + rightPrice)} | ${dic['earn.staked']}: \$${Fmt.priceCeil(Fmt.bigIntToDouble(shareTotal, balancePair[0]!.decimals!) * plugin.store!.assets.marketPrices[balancePair[0]!.symbol]!)}",
-                            //                 style: Theme.of(context)
-                            //                     .textTheme
-                            //                     .headline5
-                            //                     ?.copyWith(
-                            //                         color: Colors.white,
-                            //                         fontSize: 12,
-                            //                         fontWeight:
-                            //                             FontWeight.w600),
-                            //               ),
-                            //             ),
-                            //             Container(
-                            //               height: MediaQuery.of(context)
-                            //                       .size
-                            //                       .width /
-                            //                   2.4,
-                            //               padding: EdgeInsets.symmetric(
-                            //                   horizontal: 16),
-                            //               child: RewardsChart.withData(datas),
-                            //             )
-                            //           ],
-                            //         );
-                            //       }
-                            //       return Container(
-                            //         alignment: Alignment.centerLeft,
-                            //         padding:
-                            //             EdgeInsets.only(left: 16, bottom: 10),
-                            //         child: Text(
-                            //           "TVL: \$${Fmt.priceCeil(leftPrice + rightPrice)} | ${dic['earn.staked']}: \$${Fmt.priceCeil(Fmt.bigIntToDouble(shareTotal, balancePair[0]!.decimals!) * plugin.store!.assets.marketPrices[balancePair[0]!.symbol]!)}",
-                            //           style: Theme.of(context)
-                            //               .textTheme
-                            //               .headline5
-                            //               ?.copyWith(
-                            //                   color: Colors.white,
-                            //                   fontSize: 12,
-                            //                   fontWeight: FontWeight.w600),
-                            //         ),
-                            //       );
-                            //     }),
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              padding: EdgeInsets.only(left: 16, bottom: 10),
+                              child: Text(
+                                "TVL: \$${Fmt.priceCeil(leftPrice + rightPrice)} | ${dic['earn.staked']}: \$${Fmt.priceCeil(Fmt.bigIntToDouble(shareTotal, balancePair[0]!.decimals!) * plugin.store!.assets.marketPrices[balancePair[0]!.symbol]!)}",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline5
+                                    ?.copyWith(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600),
+                              ),
+                            ),
                             Container(
                               padding: EdgeInsets.symmetric(vertical: 10),
                               color: Color(0xFF494b4e),

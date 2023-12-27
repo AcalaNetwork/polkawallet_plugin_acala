@@ -1,3 +1,8 @@
+## [0.5.6]
+20231227
+- refactor swap history.
+- remove graphql_flutter dep to fix ios crash.
+
 ## [0.5.5]
 20230822
 - bump acala.js sdk v4.1.9-7.

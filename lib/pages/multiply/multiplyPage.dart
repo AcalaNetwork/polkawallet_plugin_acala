@@ -5,7 +5,6 @@ import 'package:polkawallet_plugin_acala/common/constants/index.dart';
 import 'package:polkawallet_plugin_acala/pages/loanNew/loanTabBarWidget.dart';
 import 'package:polkawallet_plugin_acala/pages/multiply/multiplyAdjustPanel.dart';
 import 'package:polkawallet_plugin_acala/pages/multiply/multiplyCreatePage.dart';
-import 'package:polkawallet_plugin_acala/pages/multiply/multiplyHistoryPage.dart';
 import 'package:polkawallet_plugin_acala/pages/multiply/pieChartPainter.dart';
 import 'package:polkawallet_plugin_acala/pages/types/loanPageParams.dart';
 import 'package:polkawallet_plugin_acala/polkawallet_plugin_acala.dart';
@@ -18,7 +17,6 @@ import 'package:polkawallet_ui/components/connectionChecker.dart';
 import 'package:polkawallet_ui/components/v3/infoItemRow.dart';
 import 'package:polkawallet_ui/components/v3/plugin/pluginAccountInfoAction.dart';
 import 'package:polkawallet_ui/components/v3/plugin/pluginButton.dart';
-import 'package:polkawallet_ui/components/v3/plugin/pluginIconButton.dart';
 import 'package:polkawallet_ui/components/v3/plugin/pluginPopLoadingWidget.dart';
 import 'package:polkawallet_ui/components/v3/plugin/pluginScaffold.dart';
 import 'package:polkawallet_ui/components/v3/plugin/pluginTokenIcon.dart';
@@ -101,17 +99,17 @@ class _MultiplyPageState extends State<MultiplyPage> {
           appBar: PluginAppBar(
             title: Text(dicCommon!['multiply.title']!),
             actions: [
-              Container(
-                margin: EdgeInsets.only(right: 12),
-                child: PluginIconButton(
-                  onPressed: () => Navigator.of(context)
-                      .pushNamed(MultiplyHistoryPage.route),
-                  icon: Image.asset(
-                    'packages/polkawallet_plugin_acala/assets/images/history.png',
-                    width: 16,
-                  ),
-                ),
-              ),
+              // Container(
+              //   margin: EdgeInsets.only(right: 12),
+              //   child: PluginIconButton(
+              //     onPressed: () => Navigator.of(context)
+              //         .pushNamed(MultiplyHistoryPage.route),
+              //     icon: Image.asset(
+              //       'packages/polkawallet_plugin_acala/assets/images/history.png',
+              //       width: 16,
+              //     ),
+              //   ),
+              // ),
               PluginAccountInfoAction(widget.keyring)
             ],
           ),

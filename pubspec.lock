@@ -201,54 +201,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.17.0"
-  connectivity_plus:
-    dependency: transitive
-    description:
-      name: connectivity_plus
-      sha256: "77e0b3766eb5d54d7f72c96ac6122f6afb6bb49015fe72f3818c3e1cd6b620cc"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.4.0"
-  connectivity_plus_linux:
-    dependency: transitive
-    description:
-      name: connectivity_plus_linux
-      sha256: "0b5133ef6c4919c0d4e15ff7038a6a330ce2f15d5271074b9873873b8f4b2823"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0"
-  connectivity_plus_macos:
-    dependency: transitive
-    description:
-      name: connectivity_plus_macos
-      sha256: "80c93c81e6af5d6678aa585ebbeb039d6c8af28806895166f87efe1123019553"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.2.1"
-  connectivity_plus_platform_interface:
-    dependency: transitive
-    description:
-      name: connectivity_plus_platform_interface
-      sha256: cfb59b641049c0e9eaae2ac11ad6a2676f5635157085f65aa4585efdcf4e56f7
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0"
-  connectivity_plus_web:
-    dependency: transitive
-    description:
-      name: connectivity_plus_web
-      sha256: "54d89a8a455e8baee2d3cf4d6a6aba6475226494f5fc527a8236b6c5a8adc5c1"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0+1"
-  connectivity_plus_windows:
-    dependency: transitive
-    description:
-      name: connectivity_plus_windows
-      sha256: "729882a35e0ee74516a8ea7a373c013070d25ec4674b73670cf9facc1f4b9586"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.2.0"
   convert:
     dependency: transitive
     description:
@@ -297,14 +249,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.1"
-  dbus:
-    dependency: transitive
-    description:
-      name: dbus
-      sha256: c7754fe8b9846cf6b5813ae7e21d981df0be6091479aa514ea322d17dd44763e
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.6"
   decimal:
     dependency: "direct main"
     description:
@@ -418,10 +362,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_inappwebview
-      sha256: f73505c792cf083d5566e1a94002311be497d984b5607f25be36d685cf6361cf
+      sha256: d198297060d116b94048301ee6749cd2e7d03c1f2689783f52d210a6b7aba350
       url: "https://pub.dev"
     source: hosted
-    version: "5.7.2+3"
+    version: "5.8.0"
   flutter_mobx:
     dependency: "direct main"
     description:
@@ -512,78 +456,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.2"
-  gql:
-    dependency: transitive
-    description:
-      name: gql
-      sha256: ac696b2f1ca9743e64c8e20f1ac1a136a0f86d0a69a20bb37ea0d4401af03713
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.13.0"
-  gql_dedupe_link:
-    dependency: transitive
-    description:
-      name: gql_dedupe_link
-      sha256: b23e16b6c8bdd06a4c5d4c9c4f924333458937aa7992bcbf3d58dd28bae5d64d
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.0"
-  gql_error_link:
-    dependency: transitive
-    description:
-      name: gql_error_link
-      sha256: c7566dc4b2f53046383b31e7f30e086f54d713795dccab0ec861387e763b4eb7
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
-  gql_exec:
-    dependency: transitive
-    description:
-      name: gql_exec
-      sha256: f2540cf9b8e02983be4b18c562960e0cb0bd8584bbc01d0b85f4010d55696125
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.0"
-  gql_http_link:
-    dependency: transitive
-    description:
-      name: gql_http_link
-      sha256: "8d9b38716d3ba3486da5ae7b5d59365ca4874ba541a2a1e4019414acafbf1a80"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.0"
-  gql_link:
-    dependency: transitive
-    description:
-      name: gql_link
-      sha256: "1813f748f46cc6f12573ac6d0f3a74bd7c073a8047928df5a743ac94e06a486f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.0"
-  gql_transform_link:
-    dependency: transitive
-    description:
-      name: gql_transform_link
-      sha256: "26cc11e55ff6591fac1ee7d1f1f6849a3d9ccac99e3c16f787f2c04bf6f7cf24"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.0"
-  graphql:
-    dependency: transitive
-    description:
-      name: graphql
-      sha256: "600fc5b6c5dab6df362fdb28932b4c40a90957ac7e89cd2c5f5bc53d70bf7245"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.0.0"
-  graphql_flutter:
-    dependency: "direct main"
-    description:
-      name: graphql_flutter
-      sha256: "3c810f30e07f2c9f05c1d3957f286c9e24ccded54adad902697387f1c348c858"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.0.0"
   graphs:
     dependency: transitive
     description:
@@ -600,14 +472,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.0"
-  hive:
-    dependency: transitive
-    description:
-      name: hive
-      sha256: a1f4139652c24d013a509a939eea7897db5e7bd8f64d0d32ef692d6f324d767d
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.4"
   html:
     dependency: transitive
     description:
@@ -768,22 +632,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
-  nm:
-    dependency: transitive
-    description:
-      name: nm
-      sha256: b47776ec6a4799d7df9e8dff48319e66efd791bf2bcab8d26408db8f716e3a0e
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.0"
-  normalize:
-    dependency: transitive
-    description:
-      name: normalize
-      sha256: "3487803f0299a3037931cb3dc5d040e6ec40e431e1f447dbdf697d30191feb0c"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.5"
   package_config:
     dependency: transitive
     description:
@@ -916,18 +764,18 @@ packages:
     dependency: "direct main"
     description:
       name: polkawallet_sdk
-      sha256: "5fae30edad2478b718eb2704470fc316321b3bbf8d390da84d5cf61c6744eaa9"
+      sha256: "59c0fb0314d0bce37cbab2b3e4fd23d840bc8428732982f442930dc60f3060d1"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.4+2"
+    version: "0.5.8+1"
   polkawallet_ui:
     dependency: "direct main"
     description:
       name: polkawallet_ui
-      sha256: aa0139cef76996fe053b7de16f6108a471a18f34326c82de4e601e054c33e676
+      sha256: "4c8c471bd339346cdf521774b27d72ba6a2e6fc24ab7924755537f0d5923121a"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.4+1"
+    version: "0.5.5+1"
   pool:
     dependency: transitive
     description:
@@ -992,14 +840,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.0"
-  rxdart:
-    dependency: transitive
-    description:
-      name: rxdart
-      sha256: "2ef8b4e91cb3b55d155e0e34eeae0ac7107974e451495c955ac04ddee8cc21fd"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.26.0"
   scrollable_positioned_list:
     dependency: transitive
     description:
@@ -1369,10 +1209,10 @@ packages:
     dependency: transitive
     description:
       name: web_socket_channel
-      sha256: "0c2ada1b1aeb2ad031ca81872add6be049b8cb479262c6ad3c4b0f9c24eaab2f"
+      sha256: d88238e5eac9a42bb43ca4e721edba3c08c6354d4a53063afaa568516217621b
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.0"
+    version: "2.4.0"
   webview_flutter:
     dependency: transitive
     description:
