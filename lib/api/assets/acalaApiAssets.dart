@@ -49,6 +49,11 @@ class AcalaApiAssets {
   Future<void> subscribeTokenBalances(
       String? address, Function(List<TokenBalanceData>) callback) async {
     final tokens = await getAllTokenSymbols();
+    // tokens.retainWhere((e) =>
+    //     (service.plugin.networkState.tokenSymbol
+    //             ?.indexOf(e.tokenNameId?.toUpperCase() ?? '') ??
+    //         -1) >
+    //     -1);
     final tokensConfig =
         service.plugin.store!.setting.remoteConfig['tokens'] ?? {};
     if (tokensConfig['invisible'] != null) {

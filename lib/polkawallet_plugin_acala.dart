@@ -267,7 +267,7 @@ class PluginAcala extends PolkawalletPlugin {
 
     _service!.assets.queryAggregatedAssets();
 
-    _subscribeOraclePricesWithLoans(acc);
+    // _subscribeOraclePricesWithLoans(acc);
 
     final nft = await _api!.assets.queryNFTs(acc.address);
     _store!.assets.setNFTs(nft);
