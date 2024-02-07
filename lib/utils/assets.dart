@@ -71,11 +71,10 @@ class AssetsUtils {
     }
     if (currencyId.length > 0 && currencyId[currencyId.keys.first] != null) {
       final currencyIdKey = currencyId.keys.first as String;
-      final list = (plugin!.store!.assets.tokenBalanceMap.values.length >=
-                  plugin.store!.assets.allTokens.length
-              ? plugin.store!.assets.tokenBalanceMap.values
-              : plugin.store!.assets.allTokens)
-          .toList();
+      final list = [
+        ...plugin!.store!.assets.tokenBalanceMap.values,
+        ...plugin.store!.assets.allTokens
+      ];
       final i = list.indexWhere((e) =>
           (e.currencyId?.keys.toList() ?? [''])[0].toLowerCase() ==
               currencyIdKey.toLowerCase() &&
