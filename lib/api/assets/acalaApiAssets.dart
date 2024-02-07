@@ -79,7 +79,7 @@ class AcalaApiAssets {
       _tokenBalances[data['tokenNameId']] = data;
 
       // do not callback if we did not receive enough data.
-      if (_tokenBalances.keys.length < tokens.length) return;
+      if (_tokenBalances.keys.length > 20) return;
 
       callback(_tokenBalances.values.map((e) {
         final decimal = e['decimals'] ??
