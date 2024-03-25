@@ -39,7 +39,7 @@
     "@acala-network/api": "^6.1.0",
     "@acala-network/api-derive": "^6.1.0",
     "@acala-network/bodhi": "^2.7.3",
-    "@acala-network/eth-providers": "^2.7.3",
+    "@acala-network/eth-providers": "^2.7.20",
     "@acala-network/nuts-swap-adapter": "^1.1.2",
     "@acala-network/sdk": "4.1.9-13",
     "@acala-network/sdk-core": "4.1.9-13",
