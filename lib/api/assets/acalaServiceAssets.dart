@@ -49,52 +49,49 @@ class AcalaServiceAssets {
 
   Future<void> subscribeTokenBalances(String? address,
       List<TokenBalanceData> tokens, Function(Map) callback) async {
-    tokens.forEach((e) {
-      final channel = '$tokenBalanceChannel${e.symbol}';
-      plugin.sdk.api.subscribeMessage(
-        'acala.getTokenBalance',
-        [address, e.tokenNameId],
-        channel,
-        (Map data) {
-          callback({
-            'id': e.id,
-            'symbol': e.symbol,
-            'tokenNameId': e.tokenNameId,
-            'currencyId': e.currencyId,
-            'type': e.type,
-            'minBalance': e.minBalance,
-            'decimals': e.decimals,
-            'balance': data
-          });
-        },
-      );
-    });
+    final tokenIds = tokens.map((e) => e.tokenNameId).toList();
+    plugin.sdk.api.subscribeMessage(
+      'acala.subscribeTokenBalanceAll',
+      [address, tokenIds],
+      tokenBalanceChannel,
+      (Map data) {
+        final e = tokens.firstWhere((i) => i.tokenNameId == data['token']);
+        callback({
+          'id': e.id,
+          'symbol': e.symbol,
+          'tokenNameId': e.tokenNameId,
+          'currencyId': e.currencyId,
+          'type': e.type,
+          'minBalance': e.minBalance,
+          'decimals': e.decimals,
+          'balance': data
+        });
+      },
+    );
     final dexPairs = await plugin.api!.swap.getTokenPairs();
-    dexPairs.forEach((e) {
-      final currencyId = {'DEXShare': e.tokens};
-      final lpToken = e.tokens!
-          .map((e) => AssetsUtils.tokenDataFromCurrencyId(plugin, e))
-          .toList();
-      final tokenId = lpToken.map((e) => e.symbol).join('-');
-      final channel =
-          '$tokenBalanceChannel${lpToken.map((e) => e.symbol).join('')}';
-      plugin.sdk.api.subscribeMessage(
-        'acala.getTokenBalance',
-        [address, e.tokenNameId],
-        channel,
-        (Map data) {
-          callback({
-            'symbol': tokenId,
-            'type': 'DexShare',
-            'tokenNameId': e.tokenNameId,
-            'currencyId': currencyId,
-            'minBalance': lpToken[0].minBalance,
-            'decimals': lpToken[0].decimals,
-            'balance': data
-          });
-        },
-      );
-    });
+    final dexPairIds = dexPairs.map((e) => e.tokenNameId).toList();
+    plugin.sdk.api.subscribeMessage(
+      'acala.subscribeTokenBalanceAll',
+      [address, dexPairIds],
+      '$tokenBalanceChannel-LP',
+      (Map data) {
+        final e = dexPairs.firstWhere((i) => i.tokenNameId == data['token']);
+        final currencyId = {'DEXShare': e.tokens};
+        final lpToken = e.tokens!
+            .map((e) => AssetsUtils.tokenDataFromCurrencyId(plugin, e))
+            .toList();
+        final symbol = lpToken.map((e) => e.symbol).join('-');
+        callback({
+          'symbol': symbol,
+          'type': 'DexShare',
+          'tokenNameId': e.tokenNameId,
+          'currencyId': currencyId,
+          'minBalance': lpToken[0].minBalance,
+          'decimals': lpToken[0].decimals,
+          'balance': data
+        });
+      },
+    );
   }
 
   Future<void> subscribeTokenPrices(

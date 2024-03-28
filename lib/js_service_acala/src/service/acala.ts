@@ -66,7 +66,7 @@ async function _initDexSDK(api: ApiRx) {
   await wallet.isReady;
 
   if (!stableAssetApi) {
-    stableAssetApi = new StableAssetRx(api);
+    stableAssetApi = new StableAssetRx(api, wallet);
   }
 
   swapper = new AggregateDex({
@@ -105,8 +105,8 @@ async function calcTokenSwapAmount(apiRx: ApiRx, input: number, output: number, 
     await _initDexSDK(apiRx);
   }
 
-  const inputToken = await ((<any>window).wallet as Wallet).getToken(swapPair[0]);
-  const outputToken = await ((<any>window).wallet as Wallet).getToken(swapPair[1]);
+  const inputToken = ((<any>window).wallet as Wallet).getToken(swapPair[0]);
+  const outputToken = ((<any>window).wallet as Wallet).getToken(swapPair[1]);
   const i = new FixedPointNumber(input || 0, inputToken.decimals);
   const o = new FixedPointNumber(output || 0, outputToken.decimals);
 
@@ -206,6 +206,10 @@ function _getTokenType(token: Token) {
 /**
  * get token balance from acala wallet sdk
  */
+async function subscribeTokenBalanceAll(address: string, tokens: string[], callback: (value: any) => void) {
+  return Promise.all(tokens.map((tokenNameId) => getTokenBalance(address, tokenNameId, callback)));
+}
+
 async function getTokenBalance(address: string, tokenNameId: string, callback: (value: any) => void) {
   const w = (<any>window).wallet as Wallet;
   await w.isReady;
@@ -214,16 +218,17 @@ async function getTokenBalance(address: string, tokenNameId: string, callback: (
   if (!!callback) {
     sub.subscribe({
       next: (value: BalanceData) => {
-        callback(_formatBalanceData(value));
+        callback(_formatBalanceData(tokenNameId, value));
       },
     });
   }
   const value = await firstValueFrom(sub);
-  return _formatBalanceData(value);
+  return _formatBalanceData(tokenNameId, value);
 }
 
-function _formatBalanceData(value: BalanceData) {
+function _formatBalanceData(token: string, value: BalanceData) {
   return {
+    token,
     free: value.free.toChainData().toString(),
     frozen: value.locked.toChainData().toString(),
     reserved: value.reserved.toChainData().toString(),
@@ -1106,6 +1111,7 @@ export default {
   calcTokenSwapAmount,
   getAllTokens,
   getTokenPrices,
+  subscribeTokenBalanceAll,
   getTokenBalance,
   getTokenPairs,
   getTaigaTokenPairs,
