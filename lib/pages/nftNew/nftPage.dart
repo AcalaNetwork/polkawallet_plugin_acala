@@ -98,7 +98,9 @@ class _NftPageState extends State<NftPage> {
                         child: imageUrl.contains('.mp4')
                             ? VideoPlayerContainer(imageUrl)
                             : Image.network(
-                                '$imageUrl?imageView2/2/w/400',
+                                imageUrl.endsWith('.gif')
+                                    ? imageUrl
+                                    : '$imageUrl?imageView2/2/w/400',
                               ),
                       ),
                       Align(

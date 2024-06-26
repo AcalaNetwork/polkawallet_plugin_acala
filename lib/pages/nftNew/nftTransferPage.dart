@@ -261,7 +261,7 @@ class NFTFormItem extends StatelessWidget {
     final symbol = plugin.networkState.tokenSymbol![0];
     final decimal = plugin.networkState.tokenDecimals![0];
     final deposit = Fmt.balance(item!.deposit, decimal);
-    final imageUrl = item!.metadata!['dwebImage'] as String;
+    final imageUrl = item!.metadata!['imageServiceUrl'] as String;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -271,7 +271,9 @@ class NFTFormItem extends StatelessWidget {
           margin: EdgeInsets.only(right: 19),
           child: imageUrl.contains('.mp4')
               ? VideoPlayerContainer(imageUrl)
-              : Image.network('$imageUrl?imageView2/2/w/400'),
+              : Image.network(imageUrl.endsWith('.gif')
+                  ? imageUrl
+                  : '$imageUrl?imageView2/2/w/400'),
         ),
         Expanded(
           child: Column(
